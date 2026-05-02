@@ -19,7 +19,7 @@ updated: 2026-05-02
 - [[../10_Published/07_Technology_Engineering_Computing_AI/_MOC.md|技術・工学・コンピューティング・AI (07_Technology_Engineering_Computing_AI)]] - 4 articles / 3 subfields
 - [[../10_Published/08_Humanities_History_Culture_Arts/_MOC.md|人文・歴史・文化・芸術 (08_Humanities_History_Culture_Arts)]] - 1 articles / 1 subfields
 - [[../10_Published/09_Information_Media_OSINT_Security/_MOC.md|情報・メディア・OSINT・セキュリティ (09_Information_Media_OSINT_Security)]] - 1 articles / 1 subfields
-- [[../10_Published/10_Life_Design_Practice_Creative_Work/_MOC.md|ライフデザイン・実践・創作 (10_Life_Design_Practice_Creative_Work)]] - 3 articles / 3 subfields
+- [[../10_Published/10_Life_Design_Practice_Creative_Work/_MOC.md|ライフデザイン・実践・創作 (10_Life_Design_Practice_Creative_Work)]] - 4 articles / 4 subfields
 
 ## Subfield Index
 
@@ -71,6 +71,7 @@ updated: 2026-05-02
 - [[../10_Published/10_Life_Design_Practice_Creative_Work/娯楽実践__entertainment-practice/_MOC.md|娯楽実践 (entertainment-practice)]] - 1 articles
 - [[../10_Published/10_Life_Design_Practice_Creative_Work/意思決定・リスク管理__decision-risk-management/_MOC.md|意思決定・リスク管理 (decision-risk-management)]] - 1 articles
 - [[../10_Published/10_Life_Design_Practice_Creative_Work/料理実践__cooking-practice/_MOC.md|料理実践 (cooking-practice)]] - 1 articles
+- [[../10_Published/10_Life_Design_Practice_Creative_Work/北海道グルメ実践__hokkaido-food-practice/_MOC.md|北海道グルメ実践 (hokkaido-food-practice)]] - 1 articles
 
 ## Main Indexes
 - [[../10_Published/_MOC.md|10_Published Root MOC]]
@@ -81,8 +82,8 @@ updated: 2026-05-02
 
 ## Coverage Check
 - Categories: 10
-- Subfields: 28
-- Published articles: 44
+- Subfields: 29
+- Published articles: 45
 - Structure: category MOCs link to subfield MOCs; subfield MOCs link to all published articles.
 
 ## Update History
