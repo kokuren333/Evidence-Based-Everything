@@ -1,0 +1,26 @@
+{
+  "name": "ebe-discord-bot",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Discord slash-command worker for Evidence Based Everything article generation.",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "register": "tsx src/discord/registerCommands.ts",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "discord.js": "^14.18.0",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.10",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,8 @@
+﻿published_root: "10_Published"
+category_count: 10
+create_subfields_initially: false
+article_must_be_in_subfield: true
+subfield_format: "{{日本語小分野名}}__{{english-slug}}"
+article_format: "{{日本語タイトル}}__{{english-slug}}.md"
+update_mocs: true
+taxonomy_log_dir: "70_Logs/taxonomy_logs"

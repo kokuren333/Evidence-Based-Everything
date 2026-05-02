@@ -1,0 +1,47 @@
+﻿publish_article:
+  frontmatter_contract: "Use exactly these keys, in this order, for every published article. Do not substitute legacy aliases."
+  frontmatter_required:
+    - project
+    - title
+    - status
+    - draft
+    - publish_ready
+    - review_status
+    - article_type
+    - created
+    - updated
+    - last_verified
+    - freshness_ttl
+    - question
+    - question_type
+    - claim_types
+    - category_id
+    - category_name
+    - category_path
+    - subfield_name
+    - subfield_path
+    - moc
+    - domain_profile
+    - evidence_standard
+    - confidence
+    - confidence_reason
+    - has_infographic
+    - infographic_path
+    - source_count
+    - claim_count
+    - references_style
+  frontmatter_optional:
+    - tags
+  body_sections:
+    - 概要
+    - この記事の見取り図
+    - 定義と全体像
+    - 歴史的背景・古典的理解
+    - 現在の標準的理解
+    - 詳細説明
+    - 応用・実践上の含意
+    - 限界・論争点・未解決事項
+    - まとめ
+    - 参考ソース
+    - 更新履歴
+    - 更新日付

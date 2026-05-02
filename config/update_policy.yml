@@ -1,0 +1,6 @@
+﻿require_updated: true
+require_last_verified: true
+require_freshness_ttl: true
+update_log_dir: "70_Logs/update_logs"
+default_freshness_ttl: "180 days"
+high_volatility_ttl: "30 days"

@@ -1,0 +1,50 @@
+﻿01_Life_Health_Medicine:
+  id: "01"
+  label_ja: "生命・健康・医学"
+  scope: "医学、公衆衛生、栄養、睡眠、運動、心理、疾患、生命科学を扱う。"
+  subfields_create_initially: false
+02_Mind_Education_Human_Development:
+  id: "02"
+  label_ja: "心理・教育・人間発達"
+  scope: "心理学、認知科学、教育、学習、発達、メンタルヘルス、人間理解を扱う。"
+  subfields_create_initially: false
+03_Society_Policy_Law_Governance:
+  id: "03"
+  label_ja: "社会・政策・法・ガバナンス"
+  scope: "社会制度、政策、法律、行政、国際関係、政治、倫理、規制、公共政策を扱う。"
+  subfields_create_initially: false
+04_Economy_Business_Work:
+  id: "04"
+  label_ja: "経済・ビジネス・仕事"
+  scope: "経済、金融、経営、会計、マーケティング、産業、労働、キャリアを扱う。"
+  subfields_create_initially: false
+05_Nature_Science_Environment:
+  id: "05"
+  label_ja: "自然科学・環境"
+  scope: "物理、化学、生物、地球科学、環境、気候、宇宙、エネルギーを扱う。"
+  subfields_create_initially: false
+06_Mathematics_Logic_Formal_Systems:
+  id: "06"
+  label_ja: "数学・論理・形式体系"
+  scope: "数学、統計、論理、形式手法、証明、アルゴリズム、モデルを扱う。"
+  subfields_create_initially: false
+07_Technology_Engineering_Computing_AI:
+  id: "07"
+  label_ja: "技術・工学・コンピューティング・AI"
+  scope: "工学、ソフトウェア、AI、機械学習、データサイエンス、ロボティクス、セキュリティを扱う。"
+  subfields_create_initially: false
+08_Humanities_History_Culture_Arts:
+  id: "08"
+  label_ja: "人文・歴史・文化・芸術"
+  scope: "歴史、哲学、文学、宗教、文化、芸術、言語、思想史を扱う。"
+  subfields_create_initially: false
+09_Information_Media_OSINT_Security:
+  id: "09"
+  label_ja: "情報・メディア・OSINT・セキュリティ"
+  scope: "OSINT、メディアリテラシー、情報検証、調査報道、サイバーセキュリティ、プロパガンダを扱う。"
+  subfields_create_initially: false
+10_Life_Design_Practice_Creative_Work:
+  id: "10"
+  label_ja: "ライフデザイン・実践・創作"
+  scope: "生活設計、実践知、創作、研究習慣、個人知識管理、意思決定を扱う。"
+  subfields_create_initially: false

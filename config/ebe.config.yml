@@ -1,0 +1,26 @@
+﻿project: "Evidence Based Everything"
+version: "1.0"
+default_language: "ja"
+timezone: "Asia/Tokyo"
+skills_root: ".agents/skills"
+published_root: "10_Published"
+working_root: "_working"
+assets_root: "50_Assets"
+logs_root: "70_Logs"
+artifact_lifecycle:
+  working_root: "_working"
+  durable_evidence_roots:
+    evidence_packets: "20_EvidencePackets"
+    sources: "30_Sources"
+    claims: "40_Claims"
+  log_dirs:
+    publish: "70_Logs/publish_logs"
+    citation_audit: "70_Logs/citation_audits"
+    quality_audit: "70_Logs/quality_audits"
+    infographic: "70_Logs/infographic_logs"
+    taxonomy: "70_Logs/taxonomy_logs"
+    update: "70_Logs/update_logs"
+autonomous_completion: true
+publish_requires_infographic: true
+publish_requires_citation_audit: true
+publish_requires_quality_audit: true

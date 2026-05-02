@@ -1,0 +1,8 @@
+﻿required_for_publish: true
+generator: "imagegen"
+asset_dir: "50_Assets/Infographics"
+brief_dir: "_working/infographic_briefs"
+allow_svg_fallback: false
+allow_code_native_fallback: false
+require_japanese_labels: true
+require_caption_citations: true

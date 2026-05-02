@@ -1,0 +1,115 @@
+name: Sync public mirror
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  sync-public:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout private vault source
+        uses: actions/checkout@v4
+
+      - name: Build allowlisted public mirror
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          rm -rf public_out
+          mkdir -p public_out
+
+          copy_if_exists() {
+            local src="$1"
+            local dst="$2"
+            if [ -e "$src" ]; then
+              mkdir -p "$(dirname "$dst")"
+              cp -a "$src" "$dst"
+            fi
+          }
+
+          copy_if_exists AGENTS.md public_out/AGENTS.md
+          copy_if_exists README.md public_out/README.md
+
+          mkdir -p public_out/.agents
+          copy_if_exists .agents/skills public_out/.agents/skills
+
+          copy_if_exists .obsidian/app.json public_out/.obsidian/app.json
+          copy_if_exists .obsidian/appearance.json public_out/.obsidian/appearance.json
+          copy_if_exists .obsidian/core-plugins.json public_out/.obsidian/core-plugins.json
+          copy_if_exists .obsidian/graph.json public_out/.obsidian/graph.json
+
+          copy_if_exists 00_Index public_out/00_Index
+          copy_if_exists config public_out/config
+          copy_if_exists scripts public_out/scripts
+
+          mkdir -p public_out/10_Published
+          find 10_Published -mindepth 1 -maxdepth 1 -type d | sort | while read -r category_dir; do
+            mkdir -p "public_out/$category_dir"
+            touch "public_out/$category_dir/.gitkeep"
+          done
+
+          mkdir -p public_out/20_EvidencePackets public_out/30_Sources public_out/40_Claims
+          copy_if_exists 20_EvidencePackets/README.md public_out/20_EvidencePackets/README.md
+          copy_if_exists 20_EvidencePackets/.gitkeep public_out/20_EvidencePackets/.gitkeep
+          copy_if_exists 30_Sources/README.md public_out/30_Sources/README.md
+          copy_if_exists 30_Sources/.gitkeep public_out/30_Sources/.gitkeep
+          copy_if_exists 40_Claims/README.md public_out/40_Claims/README.md
+          copy_if_exists 40_Claims/.gitkeep public_out/40_Claims/.gitkeep
+
+          mkdir -p public_out/50_Assets/Infographics public_out/50_Assets/Diagrams public_out/50_Assets/Attachments
+          copy_if_exists 50_Assets/README.md public_out/50_Assets/README.md
+          copy_if_exists 50_Assets/Infographics/.gitkeep public_out/50_Assets/Infographics/.gitkeep
+          copy_if_exists 50_Assets/Diagrams/.gitkeep public_out/50_Assets/Diagrams/.gitkeep
+          copy_if_exists 50_Assets/Attachments/.gitkeep public_out/50_Assets/Attachments/.gitkeep
+
+          mkdir -p public_out/60_MOCs
+          touch public_out/60_MOCs/.gitkeep
+
+          mkdir -p \
+            public_out/70_Logs/update_logs \
+            public_out/70_Logs/taxonomy_logs \
+            public_out/70_Logs/citation_audits \
+            public_out/70_Logs/quality_audits \
+            public_out/70_Logs/infographic_logs \
+            public_out/70_Logs/publish_logs
+          find 70_Logs -type f -name ".gitkeep" | while read -r keep; do
+            copy_if_exists "$keep" "public_out/$keep"
+          done
+
+      - name: Push public mirror
+        shell: bash
+        env:
+          PUBLIC_MIRROR_TOKEN: ${{ secrets.PUBLIC_MIRROR_TOKEN }}
+          PUBLIC_REPOSITORY: kokuren333/Evidence-Based-Everything
+        run: |
+          set -euo pipefail
+
+          if [ -z "${PUBLIC_MIRROR_TOKEN}" ]; then
+            echo "PUBLIC_MIRROR_TOKEN is not set."
+            exit 1
+          fi
+
+          git clone "https://x-access-token:${PUBLIC_MIRROR_TOKEN}@github.com/${PUBLIC_REPOSITORY}.git" public_repo
+
+          cd public_repo
+          find . -mindepth 1 -maxdepth 1 \
+            ! -name '.git' \
+            -exec rm -rf {} +
+
+          cp -a ../public_out/. .
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "No public mirror changes."
+          else
+            git commit -m "Sync public mirror from private vault"
+            git push origin main
+          fi

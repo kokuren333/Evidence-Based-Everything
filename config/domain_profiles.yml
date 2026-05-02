@@ -1,0 +1,19 @@
+﻿profiles:
+  biomedical_health:
+    evidence_standard: "guidelines, systematic reviews, clinical studies, official public health sources"
+    freshness_ttl: "90 days"
+  international_relations_osint_humanitarian:
+    evidence_standard: "official reports, conflict datasets, humanitarian organizations, transparent uncertainty"
+    freshness_ttl: "30 days"
+  technology_engineering:
+    evidence_standard: "official documentation, specifications, reproducible examples, benchmarks"
+    freshness_ttl: "90 days"
+  mathematics_formal:
+    evidence_standard: "definitions, theorems, proofs, standard textbooks, peer-reviewed sources"
+    freshness_ttl: "365 days"
+  humanities_history:
+    evidence_standard: "primary sources, critical editions, historiography, scholarly monographs"
+    freshness_ttl: "365 days"
+  general_policy_society:
+    evidence_standard: "official documents, laws, policy reports, high-quality research"
+    freshness_ttl: "90 days"

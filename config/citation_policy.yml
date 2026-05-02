@@ -1,0 +1,6 @@
+﻿style: "numbered_url_accessed"
+require_inline_citations: true
+require_url: true
+require_accessed_date: true
+require_infographic_caption_citations: true
+audit_log_dir: "70_Logs/citation_audits"
