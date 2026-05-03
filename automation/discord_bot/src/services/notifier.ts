@@ -5,9 +5,16 @@ export class Notifier {
   constructor(private readonly client: Client) {}
 
   async send(channelId: string, message: string): Promise<void> {
-    const channel = await this.client.channels.fetch(channelId);
-    if (!channel || !("send" in channel)) return;
-    await channel.send(message);
+    try {
+      const channel = await this.client.channels.fetch(channelId);
+      if (!channel || !("send" in channel)) {
+        console.warn(`Discord notification skipped; channel is not sendable: ${channelId}`);
+        return;
+      }
+      await channel.send(message);
+    } catch (error) {
+      console.warn(`Discord notification failed for channel ${channelId}: ${formatDiscordError(error)}`);
+    }
   }
 
   async jobStarted(job: Job, running: number, max: number): Promise<void> {
@@ -55,6 +62,11 @@ export class Notifier {
         .join("\n"),
     );
   }
+}
+
+function formatDiscordError(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  return String(error);
 }
 
 function formatJst(date: Date): string {
