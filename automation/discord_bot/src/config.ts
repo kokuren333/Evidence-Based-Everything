@@ -1,8 +1,9 @@
-import "dotenv/config";
+import dotenv from "dotenv";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const botRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+dotenv.config({ path: path.join(botRoot, ".env") });
 
 function env(name: string, fallback?: string): string {
   const value = process.env[name];
@@ -51,7 +52,7 @@ export const config = {
     logDir: resolveBotPath(env("EBE_BOT_LOG_DIR", "logs")),
   },
   workers: {
-    maxWorkers: Math.max(1, Math.min(4, intEnv("EBE_MAX_WORKERS", 4))),
+    maxWorkers: Math.max(1, intEnv("EBE_MAX_WORKERS", 4)),
     maxPublishers: Math.max(1, intEnv("EBE_MAX_PUBLISHERS", 1)),
     keepFailedWorktrees: boolEnv("EBE_KEEP_FAILED_WORKTREES", true),
     keepSuccessfulWorktrees: boolEnv("EBE_KEEP_SUCCESSFUL_WORKTREES", false),

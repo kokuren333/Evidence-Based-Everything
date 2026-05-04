@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { REST, Routes, SlashCommandBuilder } from "discord.js";
 import { config } from "../config.js";
 
