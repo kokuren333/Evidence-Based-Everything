@@ -70,7 +70,7 @@ function resolveImageReference(
 
   if (!target.includes("/") && !target.includes("\\")) {
     const basenameMatches = imageIndex.get(target.toLowerCase()) ?? [];
-    if (basenameMatches.length === 1) return { ok: true };
+    if (basenameMatches.length === 1) return { ok: false, reason: "basename-only image target; use a stable vault-relative path" };
     if (basenameMatches.length > 1) return { ok: false, reason: "ambiguous basename-only image target" };
   }
 
