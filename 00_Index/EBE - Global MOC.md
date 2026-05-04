@@ -22,4 +22,9 @@
 ## Taxonomy Coverage
 - Last rebuilt: 2026-05-04 00:00:00 +09:00
 - Coverage source: 10_Published/ filesystem tree
-- Total published articles: 41
+- Total published articles: 43
+
+## 2026-05-04 Supplemental Update
+
+- [[10_Published/10_Life_Design_Practice_Creative_Work/飲食実践__food-and-drink-practice/代表的なカクテルとその作り方__representative-cocktails-how-to-make.md|代表的なカクテルとその作り方]]
+- [[10_Published/10_Life_Design_Practice_Creative_Work/飲食実践__food-and-drink-practice/_MOC.md|飲食実践]]
