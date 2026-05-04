@@ -9,7 +9,7 @@
 
 ## Published Category MOCs
 - [[10_Published/01_Life_Health_Medicine/_MOC.md|生命・健康・医学 (01_Life_Health_Medicine)]] - 12 subfields, 26 articles
-- [[10_Published/02_Mind_Education_Human_Development/_MOC.md|心理・教育・人間発達 (02_Mind_Education_Human_Development)]] - 7 subfields, 8 articles
+- [[10_Published/02_Mind_Education_Human_Development/_MOC.md|心理・教育・人間発達 (02_Mind_Education_Human_Development)]] - 8 subfields, 9 articles
 - [[10_Published/03_Society_Policy_Law_Governance/_MOC.md|社会・政策・法・ガバナンス (03_Society_Policy_Law_Governance)]] - 1 subfields, 1 articles
 - [[10_Published/04_Economy_Business_Work/_MOC.md|経済・ビジネス・仕事 (04_Economy_Business_Work)]] - 1 subfields, 1 articles
 - [[10_Published/05_Nature_Science_Environment/_MOC.md|自然科学・環境 (05_Nature_Science_Environment)]] - 1 subfields, 1 articles
@@ -22,4 +22,4 @@
 ## Taxonomy Coverage
 - Last rebuilt: 2026-05-04 00:00:00 +09:00
 - Coverage source: 10_Published/ filesystem tree
-- Total published articles: 45
+- Total published articles: 46
