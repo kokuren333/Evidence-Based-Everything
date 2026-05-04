@@ -44,22 +44,33 @@ export async function enqueueDailyNewsJobs(
   const date = input.date ?? currentJstDate();
   assertIsoDate(date);
   const yearMonth = date.slice(0, 7);
-  const targetPaths = dailyNewsFields.map((newsField) => dailyNewsTargetPath(newsField, date));
-  const existingFile = await firstExistingVaultPath(targetPaths);
-  if (existingFile && !input.force) {
-    throw new Error(`Daily news already exists for ${date}: ${existingFile}`);
-  }
-
+  const fieldPlans = dailyNewsFields.map((newsField) => ({
+    newsField,
+    targetPath: dailyNewsTargetPath(newsField, date),
+  }));
+  const existingFiles = new Set(await existingVaultPaths(fieldPlans.map((plan) => plan.targetPath)));
   const existingJobs = (await store.dailyJobsForDate(date)).filter(
     (job) => !["failed", "failed_review_required", "cancelled"].includes(job.status),
   );
-  if (existingJobs.length > 0 && !input.force) {
-    throw new Error(`Daily news jobs already exist for ${date}: ${existingJobs.map((job) => job.id).join(", ")}`);
+  const existingJobTargets = new Set(existingJobs.map((job) => job.daily?.targetPath).filter(Boolean));
+  const plansToQueue = input.force
+    ? fieldPlans
+    : fieldPlans.filter((plan) => !existingFiles.has(plan.targetPath) && !existingJobTargets.has(plan.targetPath));
+
+  if (plansToQueue.length === 0 && !input.force) {
+    throw new Error(
+      [
+        `Daily news already exists or is already queued/running for every field on ${date}.`,
+        existingFiles.size ? `existing files: ${existingFiles.size}` : undefined,
+        existingJobs.length ? `active jobs: ${existingJobs.map((job) => job.id).join(", ")}` : undefined,
+      ]
+        .filter(Boolean)
+        .join(" "),
+    );
   }
 
   const jobs: Job[] = [];
-  for (const newsField of dailyNewsFields) {
-    const targetPath = dailyNewsTargetPath(newsField, date);
+  for (const { newsField, targetPath } of plansToQueue) {
     const job = await store.create({
       query: buildDailyNewsQuery(newsField, date, targetPath),
       mode: "new",
@@ -81,7 +92,12 @@ export async function enqueueDailyNewsJobs(
     });
     jobs.push(job);
   }
-  return { date, jobs };
+  const skippedCount = fieldPlans.length - plansToQueue.length;
+  return {
+    date,
+    jobs,
+    skippedReason: skippedCount > 0 ? `Skipped ${skippedCount} fields with existing files or active jobs.` : undefined,
+  };
 }
 
 export function startDailyNewsScheduler(store: JobStore, notifier: Notifier): NodeJS.Timeout | undefined {
@@ -150,16 +166,18 @@ function buildDailyNewsQuery(newsField: DailyNewsField, date: string, targetPath
   ].join("\n");
 }
 
-async function firstExistingVaultPath(paths: string[]): Promise<string | undefined> {
-  for (const relativePath of paths) {
-    try {
-      await fs.access(path.join(config.paths.vaultRoot, relativePath));
-      return relativePath;
-    } catch {
-      // Keep scanning.
-    }
-  }
-  return undefined;
+async function existingVaultPaths(paths: string[]): Promise<string[]> {
+  const checks = await Promise.all(
+    paths.map(async (relativePath) => {
+      try {
+        await fs.access(path.join(config.paths.vaultRoot, relativePath));
+        return relativePath;
+      } catch {
+        return undefined;
+      }
+    }),
+  );
+  return checks.filter((relativePath): relativePath is string => Boolean(relativePath));
 }
 
 function currentJstDate(): string {

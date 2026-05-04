@@ -123,8 +123,11 @@ export function createDiscordClient(store: JobStore, getWorkerPool: () => Worker
           [
             `daily news queued: \`${result.date}\``,
             `jobs: \`${result.jobs.length}\``,
+            result.skippedReason,
             ...result.jobs.map((job) => `- \`${job.id}\` ${job.daily?.directoryName}`),
-          ].join("\n"),
+          ]
+            .filter(Boolean)
+            .join("\n"),
         );
       } else if (interaction.commandName === "moc-maintenance") {
         assertAdmin(interaction.user.id);
