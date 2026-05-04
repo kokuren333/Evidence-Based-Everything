@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-research-drafter
 description: "Create internal EBE evidence packets, source registries, claim tables, and provisional drafts from research; drafts are never final publish outputs."
 ---

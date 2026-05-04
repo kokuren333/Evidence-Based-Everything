@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-update-diff-logger
 description: "Write EBE update diff logs with update reasons, added or demoted sources, changed claims, confidence changes, updated sections, infographic updates, and MOC updates."
 ---

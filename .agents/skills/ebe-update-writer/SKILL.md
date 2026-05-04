@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-update-writer
 description: "Update existing EBE published articles with new sources, revised claims, changed confidence, historical additions, refreshed infographics, references, dates, and MOCs."
 ---

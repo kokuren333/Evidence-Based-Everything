@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-evidence-synthesizer
 description: "Synthesize EBE source registries and claim tables into a coherent, source-grounded argument without adding unsupported claims or hiding uncertainty."
 ---

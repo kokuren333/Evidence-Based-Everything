@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-contradiction-checker
 description: "Search for and integrate contrary evidence, limitations, reproducibility issues, old-versus-new theory differences, unresolved disputes, and overclaiming risks."
 ---

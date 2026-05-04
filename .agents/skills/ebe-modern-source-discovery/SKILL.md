@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-modern-source-discovery
 description: "Find current, reliable, URL-backed sources for EBE articles, prioritizing official documents, guidelines, reviews, standards, specifications, primary data, and authoritative sources."
 ---

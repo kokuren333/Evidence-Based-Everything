@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-historical-source-discovery
 description: "Find historical, classical, and landmark sources for EBE articles, including origin texts, older theories, turning points, historiography, and shifts from older to modern understanding."
 ---

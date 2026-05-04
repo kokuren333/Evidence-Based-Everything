@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-claim-extractor
 description: "Extract source-grounded claims for EBE articles, recording claim IDs, claim types, supporting and contrary sources, confidence, limitations, applicability, and uncertainty."
 ---

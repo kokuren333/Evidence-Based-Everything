@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-refresh-monitor
 description: "Detect EBE articles needing updates from updated, last_verified, freshness_ttl, domain volatility, and create update jobs for stale or rapidly changing topics."
 ---

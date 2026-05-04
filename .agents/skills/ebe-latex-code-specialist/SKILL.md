@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-latex-code-specialist
 description: "Review and improve mathematics, engineering, software, and AI sections in EBE articles: LaTeX, proofs, pseudocode, code fences, specs, tests, benchmarks, and reproducibility notes."
 ---

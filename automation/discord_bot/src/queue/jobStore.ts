@@ -63,6 +63,45 @@ export class JobStore {
     });
   }
 
+  async createMany(
+    inputs: {
+      query: string;
+      mode: ArticleMode;
+      discordUserId: string;
+      channelId: string;
+      guildId: string | null;
+      model: string;
+      reasoningEffort: string;
+      jobType?: JobType;
+      daily?: DailyNewsMeta;
+      mocMaintenance?: MocMaintenanceMeta;
+    }[],
+  ): Promise<Job[]> {
+    return this.withLock(async () => {
+      const data = await this.read();
+      const now = new Date().toISOString();
+      const jobs = inputs.map((input) => ({
+        id: safeJobId(),
+        jobType: input.jobType ?? "article",
+        query: input.query,
+        mode: input.mode,
+        status: "queued" as JobStatus,
+        discordUserId: input.discordUserId,
+        channelId: input.channelId,
+        guildId: input.guildId,
+        createdAt: now,
+        updatedAt: now,
+        model: input.model,
+        reasoningEffort: input.reasoningEffort,
+        daily: input.daily,
+        mocMaintenance: input.mocMaintenance,
+      }));
+      data.jobs.push(...jobs);
+      await this.write(data);
+      return jobs;
+    });
+  }
+
   async all(): Promise<Job[]> {
     return (await this.read()).jobs;
   }

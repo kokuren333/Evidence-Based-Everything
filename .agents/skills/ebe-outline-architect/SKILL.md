@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-outline-architect
 description: "Design textbook-like EBE article outlines with narrative flow, historical context, modern understanding, 5W1H coverage, applications, limitations, summary, references, and update sections."
 ---

@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-category-subfield-moc-manager
 description: "Create and update EBE category, subfield directories, and MOCs when publishing Obsidian articles; choose one primary category, create subfields only when needed, update global MOCs, and write taxonomy logs."
 ---

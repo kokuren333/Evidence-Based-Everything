@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-citation-auditor
 description: "Audit EBE article citations, numbered references, URL presence, claim-source correspondence, duplicate references, infographic captions, and write citation audit logs before publishing."
 ---

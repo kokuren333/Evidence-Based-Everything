@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-obsidian-publisher
 description: "Save publish-ready EBE articles into Obsidian subfield directories, preserve backlinks, use Obsidian image links, update MOCs, and log published paths without bypassing quality gates."
 ---

@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-domain-profile-selector
 description: "Select the Evidence Based Everything domain profile and evidence hierarchy for biomedical, education, law, economy, science, mathematics, technology, humanities, OSINT, and life-practice topics."
 ---

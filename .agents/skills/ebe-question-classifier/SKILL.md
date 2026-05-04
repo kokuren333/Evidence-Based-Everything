@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-question-classifier
 description: "Classify EBE user questions by 5W1H, article intent, claim types, and expected evidence needs before any research or writing begins."
 ---

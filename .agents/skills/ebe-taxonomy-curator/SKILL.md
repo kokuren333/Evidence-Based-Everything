@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-taxonomy-curator
 description: "Audit and reorganize accumulated EBE articles, source notes, claim notes, subfields, category MOCs, and global MOCs safely, preserving files, links, aliases, and logs."
 ---

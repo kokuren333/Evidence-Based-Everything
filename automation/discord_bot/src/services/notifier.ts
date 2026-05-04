@@ -18,6 +18,20 @@ export class Notifier {
   }
 
   async jobStarted(job: Job, running: number, max: number): Promise<void> {
+    if (job.jobType === "codex") {
+      await this.send(
+        job.channelId,
+        [
+          "Codex root query started.",
+          `job: \`${job.id}\``,
+          `slot: \`${running}/${max}\``,
+          `model: \`${job.model} ${job.reasoningEffort}\``,
+          `started: \`${formatJst(new Date())}\``,
+        ].join("\n"),
+      );
+      return;
+    }
+
     await this.send(
       job.channelId,
       [
@@ -31,6 +45,18 @@ export class Notifier {
   }
 
   async jobSucceeded(job: Job): Promise<void> {
+    if (job.jobType === "codex") {
+      await this.send(
+        job.channelId,
+        [
+          "Codex root query completed.",
+          `job: \`${job.id}\``,
+          `log: \`_working\\discord_codex\\${job.id}\\codex-output.log\``,
+        ].join("\n"),
+      );
+      return;
+    }
+
     await this.send(
       job.channelId,
       [
@@ -45,9 +71,12 @@ export class Notifier {
 
   async jobFailed(job: Job, error: unknown): Promise<void> {
     const message = error instanceof Error ? error.message : String(error);
-    const logHint = job.worktreePath
-      ? `${job.worktreePath}\\_working\\discord_jobs\\${job.id}-codex-output.log`
-      : undefined;
+    const logHint =
+      job.jobType === "codex"
+        ? `_working\\discord_codex\\${job.id}\\codex-output.log`
+        : job.worktreePath
+          ? `${job.worktreePath}\\_working\\discord_jobs\\${job.id}-codex-output.log`
+          : undefined;
     await this.send(
       job.channelId,
       [

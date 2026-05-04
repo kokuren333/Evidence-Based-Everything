@@ -5,6 +5,11 @@ import type { Job } from "../types.js";
 import { quoteForShell, runCommand } from "../utils/shell.js";
 
 export async function runCodexForJob(job: Job, signal?: AbortSignal): Promise<void> {
+  if (job.jobType === "codex") {
+    await runCodexForRootQuery(job, signal);
+    return;
+  }
+
   if (!job.worktreePath) throw new Error("Job is missing worktreePath");
   const prompt = buildPrompt(job);
   const promptFile = path.join(job.worktreePath, "_working", "discord_jobs", `${job.id}-prompt.md`);
@@ -31,7 +36,50 @@ export async function runCodexForJob(job: Job, signal?: AbortSignal): Promise<vo
   }
 }
 
+export async function runCodexForRootQuery(job: Job, signal?: AbortSignal): Promise<void> {
+  const cwd = config.paths.vaultRoot;
+  const prompt = buildPrompt(job);
+  const jobDir = path.join(cwd, "_working", "discord_codex", job.id);
+  const promptFile = path.join(jobDir, "prompt.md");
+  await fs.mkdir(jobDir, { recursive: true });
+  await fs.writeFile(promptFile, prompt, "utf8");
+
+  const command = config.codex.commandTemplate
+    .replaceAll("{model}", quoteForShell(job.model))
+    .replaceAll("{effort}", quoteForShell(job.reasoningEffort))
+    .replaceAll("{cwd}", quoteForShell(cwd))
+    .replaceAll("{promptFile}", quoteForShell(promptFile));
+
+  const result = await runCommand(command, {
+    cwd,
+    stdin: prompt,
+    timeoutMs: 1000 * 60 * 60 * 6,
+    signal,
+  });
+
+  const logFile = path.join(jobDir, "codex-output.log");
+  await fs.writeFile(logFile, `STDOUT\n${result.stdout}\n\nSTDERR\n${result.stderr}\n`, "utf8");
+  if (result.code !== 0) {
+    throw new Error(`Codex command failed (${result.code}). See ${logFile}`);
+  }
+}
+
 function buildPrompt(job: Job): string {
+  if (job.jobType === "codex") {
+    return [
+      "Run this request from the Vault root directory with full Codex CLI permissions.",
+      "Follow AGENTS.md and local instructions when they apply.",
+      "",
+      `job_type: ${job.jobType}`,
+      `job_id: ${job.id}`,
+      `discord_user_id: ${job.discordUserId}`,
+      "",
+      "User query:",
+      job.query,
+      "",
+    ].join("\n");
+  }
+
   if (job.jobType === "moc_maintenance") {
     const scope = job.mocMaintenance?.scope ?? "all";
     return [

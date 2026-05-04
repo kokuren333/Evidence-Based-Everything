@@ -9,7 +9,7 @@ export type JobStatus =
   | "cancelled";
 
 export type ArticleMode = "new" | "update";
-export type JobType = "article" | "daily_news" | "moc_maintenance";
+export type JobType = "article" | "daily_news" | "moc_maintenance" | "codex";
 
 export interface DailyNewsMeta {
   date: string;

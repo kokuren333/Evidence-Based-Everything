@@ -100,37 +100,47 @@ export class WorkerPool {
     try {
       await this.notifier.jobStarted(job, this.active, config.workers.maxWorkers);
       await this.throwIfCancelled(job.id);
-      const workspace = await createWorktree(job);
-      job = await this.store.update(job.id, workspace);
-      await writeJobLog(job.id, `Created worktree ${workspace.worktreePath} on ${workspace.branchName}`);
+      if (job.jobType === "codex") {
+        const activeWorker = this.activeWorkers.get(job.id);
+        await runCodexForJob(job, activeWorker?.abortController.signal);
+        job = await this.store.update(job.id, {
+          status: "succeeded",
+          finishedAt: new Date().toISOString(),
+          resultSummary: "Codex root query completed.",
+        });
+      } else {
+        const workspace = await createWorktree(job);
+        job = await this.store.update(job.id, workspace);
+        await writeJobLog(job.id, `Created worktree ${workspace.worktreePath} on ${workspace.branchName}`);
 
-      await this.throwIfCancelled(job.id);
-      const activeWorker = this.activeWorkers.get(job.id);
-      await runCodexForJob(job, activeWorker?.abortController.signal);
-      if (job.jobType === "moc_maintenance") {
-        await assertMocIntegrity(job.worktreePath!);
-      }
-      await this.throwIfCancelled(job.id);
-      if (!(await hasDurableArticleChanges(job.worktreePath!))) {
-        throw new Error("Codex produced no durable EBE article artifacts outside ignored working/runtime paths.");
-      }
+        await this.throwIfCancelled(job.id);
+        const activeWorker = this.activeWorkers.get(job.id);
+        await runCodexForJob(job, activeWorker?.abortController.signal);
+        if (job.jobType === "moc_maintenance") {
+          await assertMocIntegrity(job.worktreePath!);
+        }
+        await this.throwIfCancelled(job.id);
+        if (!(await hasDurableArticleChanges(job.worktreePath!))) {
+          throw new Error("Codex produced no durable EBE article artifacts outside ignored working/runtime paths.");
+        }
 
-      const commitSha = await commitWorkerChanges(job);
-      job = await this.store.update(job.id, { status: "waiting_publish", commitSha });
-      await writeJobLog(job.id, `Worker commit ${commitSha}`);
+        const commitSha = await commitWorkerChanges(job);
+        job = await this.store.update(job.id, { status: "waiting_publish", commitSha });
+        await writeJobLog(job.id, `Worker commit ${commitSha}`);
 
-      await this.throwIfCancelled(job.id);
-      job = await this.store.update(job.id, { status: "publishing" });
-      const pushedCommitSha = await publishWorkerBranch(job);
-      job = await this.store.update(job.id, {
-        status: "succeeded",
-        pushedCommitSha,
-        finishedAt: new Date().toISOString(),
-        resultSummary: "Published to private repository.",
-      });
+        await this.throwIfCancelled(job.id);
+        job = await this.store.update(job.id, { status: "publishing" });
+        const pushedCommitSha = await publishWorkerBranch(job);
+        job = await this.store.update(job.id, {
+          status: "succeeded",
+          pushedCommitSha,
+          finishedAt: new Date().toISOString(),
+          resultSummary: "Published to private repository.",
+        });
 
-      if (!config.workers.keepSuccessfulWorktrees && job.worktreePath && job.branchName) {
-        await removeWorktree(job.worktreePath, job.branchName);
+        if (!config.workers.keepSuccessfulWorktrees && job.worktreePath && job.branchName) {
+          await removeWorktree(job.worktreePath, job.branchName);
+        }
       }
       await this.notifier.jobSucceeded(job);
     } catch (error) {

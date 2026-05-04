@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-source-appraiser
 description: "Appraise EBE sources by authority, directness, method quality, transparency, recency, historical importance, independence, conflicts of interest, reproducibility, and limitations."
 ---

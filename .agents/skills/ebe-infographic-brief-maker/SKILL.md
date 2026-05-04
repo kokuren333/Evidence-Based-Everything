@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-infographic-brief-maker
 description: "Create a source-grounded Japanese infographic brief for EBE articles before image generation, using only article claims and cited source-backed concepts; briefs must require imagegen raster output and forbid SVG/vector/code-native substitutes."
 ---

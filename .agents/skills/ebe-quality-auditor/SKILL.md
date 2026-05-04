@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-quality-auditor
 description: "Run the final EBE publish gate for grounding, citations, infographic, historical context, modernity, readability, domain-specific requirements, MOCs, update metadata, and block failed articles."
 ---

@@ -33,7 +33,7 @@ default reasoning effort: low
 - Runtime queue data lives in `data/`, ignored by Git.
 - Runtime logs live in `logs/`, ignored by Git.
 - Worker worktrees must be outside the vault repository.
-- `/git-debug` is restricted to `DISCORD_ADMIN_USER_IDS`.
+- `/codex` and `/git-debug` are restricted to `DISCORD_ADMIN_USER_IDS`.
 - The public mirror workflow copies source files and `.env.example`, but not `.env`, `data/`, `logs/`, `node_modules/`, `.cache/`, or `dist/`.
 - Do not commit personal access tokens, Codex auth files, Discord tokens, `.env`, or local runtime databases.
 - Prefer a dedicated private repository token or Git Credential Manager for push access.
@@ -270,6 +270,8 @@ The resource guard may delay new jobs if memory or CPU usage is high.
 ## Slash Commands
 
 - `/article query:"..." mode:new`
+- `/multi_article query:"..." count:15`
+- `/codex query:"..."`
 - `/job-status job_id:"..."`
 - `/job-cancel job_id:"..."`
 - `/job-retry job_id:"..."`
@@ -285,6 +287,10 @@ The resource guard may delay new jobs if memory or CPU usage is high.
 - `/bot-health`
 
 `/article` immediately queues a job and reports the job ID. The bot posts start, success, and failure updates to the invoking channel.
+
+`/multi_article` expands one broad theme into multiple article titles and queues each title as a normal `/article` job. For example, `/multi_article query:"英文法を網羅" count:15` queues 15 new article jobs covering that theme from overview through advanced topics.
+
+`/codex` is admin-only. It queues a freeform Codex CLI request in `EBE_VAULT_ROOT` with the configured Codex command template. It does not create a worktree and does not automatically commit or push changes.
 
 `/daily-news` is admin-only. It queues one daily news job for each of the 10 fixed fields and defaults to today's JST date.
 

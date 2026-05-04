@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-textbook-style-writer
 description: "Rewrite EBE drafts into Japanese textbook, reference-book, review, or monograph-like prose while preserving source grounding, citations, uncertainty, and domain-specific nuance."
 ---

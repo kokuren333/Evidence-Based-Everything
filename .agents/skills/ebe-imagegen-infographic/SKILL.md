@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-imagegen-infographic
 description: "Generate and verify Japanese top-of-article EBE infographics from infographic briefs using the default imagegen skill; SVG/vector/code-native substitutes are forbidden for publish infographics."
 ---

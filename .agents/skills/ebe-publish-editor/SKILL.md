@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-publish-editor
 description: "Convert EBE drafts into publish-ready Obsidian Markdown articles with frontmatter, citations, references, historical context, modern understanding, limitations, infographic, update history, and publish gates."
 ---

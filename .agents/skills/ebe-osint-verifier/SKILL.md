@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-osint-verifier
 description: "Verify who, when, where, provenance, media, public-information, and OSINT claims for EBE while enforcing privacy, legality, harm minimization, and chain-of-custody rules."
 ---

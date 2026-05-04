@@ -17,6 +17,26 @@ const commands = [
         .addChoices({ name: "new", value: "new" }, { name: "update", value: "update" }),
     ),
   new SlashCommandBuilder()
+    .setName("multi_article")
+    .setDescription("Queue multiple EBE article jobs that cover one theme.")
+    .addStringOption((option) =>
+      option.setName("query").setDescription("Theme to cover across multiple articles.").setRequired(true).setMaxLength(600),
+    )
+    .addIntegerOption((option) =>
+      option
+        .setName("count")
+        .setDescription("Number of article jobs to queue, 2-25.")
+        .setRequired(true)
+        .setMinValue(2)
+        .setMaxValue(25),
+    ),
+  new SlashCommandBuilder()
+    .setName("codex")
+    .setDescription("Admin-only: run a free Codex query from the EBE vault root.")
+    .addStringOption((option) =>
+      option.setName("query").setDescription("Freeform Codex request.").setRequired(true).setMaxLength(1800),
+    ),
+  new SlashCommandBuilder()
     .setName("job-status")
     .setDescription("Show one job status.")
     .addStringOption((option) => option.setName("job_id").setDescription("Job ID.").setRequired(true)),

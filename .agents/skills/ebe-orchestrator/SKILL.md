@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-orchestrator
 description: "Coordinate the full Evidence Based Everything workflow for Obsidian: classify requests, route article creation, updates, source audits, MOC maintenance, taxonomy reorganization, infographic generation, citation gates, and publish gates."
 ---

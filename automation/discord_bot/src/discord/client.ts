@@ -41,6 +41,59 @@ export function createDiscordClient(store: JobStore, getWorkerPool: () => Worker
             `model: \`${job.model} ${job.reasoningEffort}\``,
           ].join("\n"),
         );
+      } else if (interaction.commandName === "multi_article") {
+        const query = interaction.options.getString("query", true).trim();
+        const count = interaction.options.getInteger("count", true);
+        const articleQueries = buildMultiArticleQueries(query, count);
+        const jobs = await store.createMany(
+          articleQueries.map((articleQuery) => ({
+            query: articleQuery,
+            mode: "new",
+            discordUserId: interaction.user.id,
+            channelId: interaction.channelId,
+            guildId: interaction.guildId,
+            model: config.codex.model,
+            reasoningEffort: config.codex.reasoningEffort,
+          })),
+        );
+        const queued = await store.countByStatus("queued");
+        await interaction.reply(
+          [
+            "Multi-article jobs queued.",
+            `theme: \`${query}\``,
+            `jobs: \`${jobs.length}\``,
+            `queued: \`${queued}\``,
+            `workers: \`${config.workers.maxWorkers}\``,
+            "planned titles:",
+            ...articleQueries.map((articleQuery, index) => `${index + 1}. ${previewTitle(articleQuery)}`),
+            "job ids:",
+            ...jobs.map((job) => `- \`${job.id}\``),
+          ].join("\n").slice(0, 1900),
+        );
+      } else if (interaction.commandName === "codex") {
+        assertAdmin(interaction.user.id);
+        const query = interaction.options.getString("query", true);
+        const job = await store.create({
+          query,
+          mode: "new",
+          discordUserId: interaction.user.id,
+          channelId: interaction.channelId,
+          guildId: interaction.guildId,
+          model: config.codex.model,
+          reasoningEffort: config.codex.reasoningEffort,
+          jobType: "codex",
+        });
+        const queued = await store.countByStatus("queued");
+        await interaction.reply(
+          [
+            "Codex root query queued.",
+            `job: \`${job.id}\``,
+            `cwd: \`${config.paths.vaultRoot}\``,
+            `queued: \`${queued}\``,
+            `workers: \`${config.workers.maxWorkers}\``,
+            `model: \`${job.model} ${job.reasoningEffort}\``,
+          ].join("\n"),
+        );
       } else if (interaction.commandName === "job-status") {
         const jobId = interaction.options.getString("job_id", true);
         const job = await store.get(jobId);
@@ -197,4 +250,51 @@ function formatJob(job: Job): string {
 
 function formatJobLine(job: Job): string {
   return `\`${job.id}\` ${job.status} ${job.jobType ?? "article"} ${job.mode} ${job.createdAt}`;
+}
+
+function buildMultiArticleQueries(theme: string, count: number): string[] {
+  if (count < 2 || count > 25) throw new Error("count must be between 2 and 25.");
+  const cleanTheme = theme.replace(/\s+/g, " ").trim();
+  if (!cleanTheme) throw new Error("query must not be empty.");
+
+  const angles = [
+    "全体像と学習ロードマップ",
+    "基本概念・用語・前提知識",
+    "歴史的背景と標準的理解の変遷",
+    "中核となる分類と体系",
+    "初学者が最初に押さえる原理",
+    "実践で使う判断手順",
+    "代表例とケーススタディ",
+    "よくある誤解とつまずき",
+    "応用領域と関連分野",
+    "評価方法・チェックリスト・到達目標",
+    "例外・特殊ケース・境界条件",
+    "限界・論争点・未解決問題",
+    "上級トピックへの接続",
+    "総復習と知識マップ",
+    "独学・教育・実務への展開",
+    "重要文献・資料・学習リソース",
+    "比較表で理解する主要パターン",
+    "失敗例から学ぶ注意点",
+    "現代的アップデートと最新動向",
+    "分野横断で使える考え方",
+    "演習問題と解説",
+    "実務導入時のリスク管理",
+    "専門家の評価基準",
+    "まとめと今後の学習計画",
+    "索引的な用語集と参照ガイド",
+  ];
+
+  return angles.slice(0, count).map((angle, index) =>
+    [
+      `「${cleanTheme}」を網羅する連続記事シリーズの第${index + 1}回として、`,
+      `記事タイトル案「${cleanTheme}：${angle}」でEBE新規記事を作成する。`,
+      `シリーズ全体の記事数は${count}本。この記事では他回と重複しすぎず、「${angle}」に焦点を当てる。`,
+    ].join(""),
+  );
+}
+
+function previewTitle(articleQuery: string): string {
+  const match = articleQuery.match(/記事タイトル案「(.+?)」/);
+  return match?.[1] ?? articleQuery.slice(0, 80);
 }

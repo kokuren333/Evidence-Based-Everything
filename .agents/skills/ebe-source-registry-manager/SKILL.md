@@ -1,4 +1,4 @@
-﻿---
+---
 name: ebe-source-registry-manager
 description: "Maintain URL-backed EBE source registries, stable source IDs, reference numbers, accessed dates, source notes, and synchronization between article reference lists and source registries."
 ---
