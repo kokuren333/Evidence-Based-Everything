@@ -66,7 +66,7 @@ EBEの成果物はライフサイクルで分ける。`_working/` は未公開�
 
 ## Discord Bot Automation
 
-このリポジトリには、DiscordのSlash CommandからEBE記事生成を依頼するためのBot実装が含まれている。
+このリポジトリには、DiscordのSlash CommandからEBE記事生成・一括記事生成・Vault管理用Codex実行を依頼するためのBot実装が含まれている。
 
 ```text
 Discord /article
@@ -76,7 +76,19 @@ Discord /article
   -> GitHub Actionsがpublic mirrorを更新
 ```
 
+主なコマンドは次の通り。
+
+- `/article query:"..." mode:new`: 1本の記事作成または更新をキューに入れる。
+- `/multi_article query:"英文法を網羅" count:15`: テーマを分解し、複数の記事タイトル案を作って記事jobをまとめてキューに入れる。
+- `/codex query:"..."`: 管理者専用。VaultルートでCodex CLIを直接実行する。通常の記事publish flowとは別で、worktree作成や自動pushはしない。
+- `/daily-news`: 管理者専用。日次ニュース記事をまとめてキューに入れる。
+- `/moc-maintenance`: 管理者専用。公開記事や日次記事のMOCを再構成する。
+
 Bot本体は `automation/discord_bot/` にある。詳しいセットアップは `automation/discord_bot/README.md` を参照する。
+
+### 公開記事の扱い
+
+`10_Published/` は公開可能な最終記事だけを置く領域である。公開に向かない記事、個人プロフィール性が強い記事、ギャンブル・投機・センシティブテーマの記事は、必要に応じて削除または非公開領域へ退避し、MOC・証跡・画像・ログも整合するように更新する。
 
 ### 公開Mirrorの考え方
 
@@ -87,6 +99,31 @@ Bot本体は `automation/discord_bot/` にある。詳しいセットアップ�
 - secrets: GitHub Secrets、`.env`、ローカル認証情報として管理し、Gitに入れない。
 
 public mirrorは `.github/workflows/sync-public-mirror.yml` のallowlistで作られる。記事本文やprivate artifactsをpublicに出したくない場合は、workflowのallowlistに含めない。
+
+### 公開記事リポジトリ
+
+ひな形公開用のpublic mirrorとは別に、公開記事だけを蓄積するpublic repositoryも用意できる。これは `.github/workflows/sync-public-articles.yml` で同期する。
+
+同期対象は次のみに限定する。
+
+- `index.md`
+- `10_Published/`
+- `11_Daily/`
+- `00_Index/EBE - Home.md`
+- `00_Index/EBE - Global MOC.md`
+- `60_MOCs/`
+- `50_Assets/` のうち、公開Markdownから参照されている画像・添付ファイル
+- `LICENSE`
+- 公開記事リポジトリ用に生成される `README.md`
+
+同期しないものは、`_working/`、`20_EvidencePackets/`、`30_Sources/`、`40_Claims/`、`70_Logs/`、Discord Bot実装、private運用設定、認証情報である。
+
+GitHub側では、private repositoryに次を設定する。
+
+- Secret: `PUBLIC_ARTICLES_TOKEN`
+- Variable: `PUBLIC_ARTICLES_REPOSITORY`
+
+`PUBLIC_ARTICLES_REPOSITORY` は `owner/repository` 形式で指定する。例: `kokuren333/Evidence-Based-Everything-Articles`
 
 ### Obsidianで読む
 

@@ -1,0 +1,40 @@
+name: Sync public articles
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+# This is a reference copy of .github/workflows/sync-public-articles.yml.
+# Configure these in the private repository:
+#
+# Secrets:
+#   PUBLIC_ARTICLES_TOKEN
+#
+# Variables:
+#   PUBLIC_ARTICLES_REPOSITORY
+#
+# PUBLIC_ARTICLES_REPOSITORY should be owner/repository, for example:
+#   owner/evidence-based-everything-articles
+#
+# The workflow publishes only:
+#   - index.md
+#   - selected 00_Index files:
+#       - 00_Index/EBE - Home.md
+#       - 00_Index/EBE - Global MOC.md
+#   - 10_Published/
+#   - 11_Daily/
+#   - 60_MOCs/
+#   - 50_Assets/ files referenced by those Markdown files
+#   - LICENSE
+#   - generated public README.md
+#
+# It intentionally excludes:
+#   - _working/
+#   - 20_EvidencePackets/
+#   - 30_Sources/
+#   - 40_Claims/
+#   - 70_Logs/
+#   - automation/discord_bot/
+#   - private runtime files and secrets

@@ -1,44 +1,95 @@
 # EBE Discord Bot
 
-Discord slash-command automation for Evidence Based Everything.
+Evidence Based Everything（EBE）VaultをDiscordから操作するためのBotである。DiscordのSlash Commandから記事生成、複数記事の一括キュー投入、日次ニュース作成、MOC整備、Git状態確認、VaultルートでのCodex実行を行える。
 
-The bot accepts article requests from Discord, runs Codex in isolated Git worktrees, and publishes successful jobs to the private vault repository. Article generation can run with up to four workers, while merge/commit/push is serialized to protect the main vault.
-
-This guide is written for a public repository. It intentionally avoids hardcoded user names, local paths, GitHub account names, repository names, Discord IDs, and tokens. Put machine-specific values in `.env`, GitHub Secrets, or GitHub Actions Variables.
-
-## What This Bot Does
+## できること
 
 ```text
-Discord slash command
-  -> queue a job
-  -> create an isolated Git worktree
-  -> run Codex with the EBE instructions
-  -> commit durable generated artifacts on a job branch
-  -> merge/push successful jobs to the private vault repository
-  -> notify Discord when the job starts, succeeds, or fails
+Discord command
+  -> Botがjobをqueueへ登録
+  -> Codex CLIがEBE workflowを実行
+  -> 成功した記事jobだけをprivate vault repositoryへmerge/push
+  -> Discordへ開始・成功・失敗を通知
 ```
 
-Default generation settings:
+通常の記事生成では、Botは外部Git worktreeを作り、そこでCodexを実行する。成功したjobだけをprivate repositoryへ反映するため、失敗した記事やPublish Gate未通過の記事がそのまま公開領域へ入ることを避けやすい。
 
-```text
-max article workers: 4
-max publisher workers: 1
-default model: gpt-5.5
-default reasoning effort: low
-```
+## 主なコマンド
 
-## Security Model
+- `/article query:"..." mode:new`
+  - 1本の記事作成をキューに入れる。
+  - `mode:update` を指定すると既存記事更新用の依頼として扱う。
 
-- Real secrets live only in `.env`, which is ignored by Git.
-- Runtime queue data lives in `data/`, ignored by Git.
-- Runtime logs live in `logs/`, ignored by Git.
-- Worker worktrees must be outside the vault repository.
-- `/codex` and `/git-debug` are restricted to `DISCORD_ADMIN_USER_IDS`.
-- The public mirror workflow copies source files and `.env.example`, but not `.env`, `data/`, `logs/`, `node_modules/`, `.cache/`, or `dist/`.
-- Do not commit personal access tokens, Codex auth files, Discord tokens, `.env`, or local runtime databases.
-- Prefer a dedicated private repository token or Git Credential Manager for push access.
+- `/multi_article query:"英文法を網羅" count:15`
+  - 1つの大きなテーマを複数の記事タイトル案に分解し、指定本数分の通常記事jobをまとめてキューに入れる。
+  - `count` は `2` から `25`。
+  - 例: `英文法を網羅` と `15` を指定すると、英文法を体系的に扱う15本の記事jobを作る。
 
-## Repository Layout
+- `/codex query:"..."`
+  - 管理者専用。
+  - `EBE_VAULT_ROOT` 直下でCodex CLIを直接実行する。
+  - worktree作成、Publish Gate、commit、pushは自動では行わない。
+  - 自由度が高いぶん危険度も高いため、`DISCORD_ADMIN_USER_IDS` のユーザーだけが使える。
+
+- `/daily-news date:"2026-05-02"`
+  - 管理者専用。
+  - 指定日の10分野分の日次ニュースjobをキューに入れる。
+  - `date` を省略するとJSTの当日を使う。
+
+- `/moc-maintenance scope:all`
+  - 管理者専用。
+  - 公開記事・日次記事のMOCを再構成する。
+  - `scope` は `all`、`published`、`daily`。
+
+- `/job-status job_id:"..."`
+  - jobの状態、worktree、エラー、commitなどを確認する。
+
+- `/job-list`
+  - 最近のjobを表示する。
+
+- `/job-cancel job_id:"..."`
+  - 管理者専用。
+  - queuedまたはrunningのjobをキャンセルする。
+
+- `/job-retry job_id:"..."`
+  - 管理者専用。
+  - failed、failed_review_required、cancelledのjobを再キュー投入する。
+
+- `/worker-list`
+  - 実行中workerを表示する。
+
+- `/queue-pause` / `/queue-resume`
+  - 管理者専用。
+  - 新しいqueued jobの開始を停止・再開する。
+
+- `/git-status`
+  - Vault repositoryのgit statusを表示する。
+
+- `/git-debug action:status`
+  - 管理者専用。
+  - git状態を詳しく確認する。
+
+- `/git-debug action:all`
+  - 管理者専用。
+  - main vaultでadd/commit/pushを実行するデバッグ用コマンド。通常運用では多用しない。
+
+- `/job-cleanup older_than_days:7 dry_run:true`
+  - 管理者専用。
+  - 古い失敗worktreeを一覧化または削除する。
+
+- `/bot-health`
+  - キュー、worker、resource guard、CPU、memoryの状態を表示する。
+
+## 権限と安全設計
+
+- `.env` はGitに入れない。
+- Discord token、GitHub token、Codex認証情報をrepositoryに入れない。
+- `data/`、`logs/`、`node_modules/`、`dist/` はローカル専用。
+- worker worktreeはVault repositoryの外に作る。
+- `/codex`、`/daily-news`、`/moc-maintenance`、`/job-cancel`、`/job-retry`、`/queue-pause`、`/queue-resume`、`/git-debug`、`/job-cleanup` は管理者向け。
+- 管理者は `.env` の `DISCORD_ADMIN_USER_IDS` にDiscord user IDをカンマ区切りで設定する。
+
+## ディレクトリ構造
 
 ```text
 Evidence-Based-Everything/
@@ -49,33 +100,31 @@ Evidence-Based-Everything/
       package.json
       scripts/
       src/
-      data/          # local only, ignored
-      logs/          # local only, ignored
-      node_modules/  # local only, ignored
+      data/          # local only
+      logs/          # local only
+      node_modules/  # local only
 ```
 
-The worker worktree root must be outside the vault repository:
+worktree rootはVaultの外に置く。
 
 ```text
-good:
+良い例:
+  C:\ebe-worktrees
   D:\ebe-worktrees
-  /srv/ebe-worktrees
 
-bad:
-  Evidence-Based-Everything/worktrees
+悪い例:
+  Evidence-Based-Everything\worktrees
 ```
 
-## Prerequisites
-
-Install these on the machine that will run the bot:
+## 必要なもの
 
 1. Git
-2. Node.js 20 or newer
+2. Node.js 20以上
 3. Codex CLI
-4. Access to clone and push the private vault repository
-5. A Discord application with a bot token
+4. private vault repositoryへclone/pushできるGit認証
+5. Discord applicationとbot token
 
-Check the local tools:
+確認コマンド:
 
 ```powershell
 git --version
@@ -84,78 +133,25 @@ npm -v
 codex --version
 ```
 
-Node must be version 20 or newer.
+## Discord Application設定
 
-## Discord Application Setup
+Discord Developer PortalでBotを作る。
 
-Create a Discord application in the Discord Developer Portal.
-
-1. Open the Discord Developer Portal.
-2. Create a new application.
-3. Open the Bot page and create or reset the bot token.
-4. Copy the bot token for `DISCORD_TOKEN`.
-5. Open General Information and copy the Application ID for `DISCORD_CLIENT_ID`.
-6. Invite the bot to your Discord server with these scopes:
+1. New Applicationを作成する。
+2. Botページでtokenを作成し、`DISCORD_TOKEN` に入れる。
+3. General InformationのApplication IDを `DISCORD_CLIENT_ID` に入れる。
+4. Discord server IDを `DISCORD_GUILD_ID` に入れる。
+5. 管理者にするDiscord user IDを `DISCORD_ADMIN_USER_IDS` に入れる。
+6. Botを次のscopeでサーバーへ招待する。
 
 ```text
 bot
 applications.commands
 ```
 
-The bot needs permission to receive slash commands and send messages in the channel where it is used.
+## .env設定
 
-To get IDs:
-
-1. Enable Developer Mode in Discord.
-2. Right-click the server and copy the server ID for `DISCORD_GUILD_ID`.
-3. Right-click your user and copy the user ID for `DISCORD_ADMIN_USER_IDS`.
-
-Multiple admin user IDs can be comma-separated:
-
-```env
-DISCORD_ADMIN_USER_IDS=111111111111111111,222222222222222222
-```
-
-## GitHub Setup
-
-This project can use a private source repository and a public mirror repository.
-
-In the private repository, configure:
-
-```text
-Secrets:
-  PUBLIC_MIRROR_TOKEN
-
-Variables:
-  PUBLIC_MIRROR_REPOSITORY
-```
-
-`PUBLIC_MIRROR_REPOSITORY` should be in `owner/repository` form.
-
-Example value:
-
-```text
-owner/public-repository-name
-```
-
-Do not put this value directly in the workflow if you want a reusable public setup.
-
-## Clone And Configure
-
-Clone the private vault repository:
-
-```powershell
-git clone <private-repository-url> Evidence-Based-Everything
-cd Evidence-Based-Everything
-```
-
-Create a worktree root outside the repository:
-
-```powershell
-mkdir C:\ebe-worktrees
-```
-
-Set up the bot:
+`automation/discord_bot/.env.example` を `.env` にコピーする。
 
 ```powershell
 cd .\automation\discord_bot
@@ -163,9 +159,7 @@ Copy-Item .env.example .env
 notepad .env
 ```
 
-Fill `.env` with local values. Keep `.env` private.
-
-Minimal example:
+最小設定例:
 
 ```env
 DISCORD_TOKEN=
@@ -173,8 +167,8 @@ DISCORD_CLIENT_ID=
 DISCORD_GUILD_ID=
 DISCORD_ADMIN_USER_IDS=
 
-EBE_VAULT_ROOT=
-EBE_WORKTREE_ROOT=
+EBE_VAULT_ROOT=C:\path\to\Evidence-Based-Everything
+EBE_WORKTREE_ROOT=C:\ebe-worktrees
 
 EBE_MAX_WORKERS=4
 EBE_MAX_PUBLISHERS=1
@@ -190,13 +184,12 @@ GIT_BOT_USER_NAME=ebe-discord-bot
 GIT_BOT_USER_EMAIL=ebe-discord-bot@example.invalid
 ```
 
-`EBE_VAULT_ROOT` is the absolute path to the cloned vault repository. `EBE_WORKTREE_ROOT` is the absolute path to the external worker directory.
+`EBE_VAULT_ROOT` はこのVaultの絶対パス。`EBE_WORKTREE_ROOT` はworker用の外部ディレクトリ。
 
-## Install And Start
-
-Run:
+## インストールと起動
 
 ```powershell
+cd .\automation\discord_bot
 npm install
 npm run typecheck
 .\scripts\check-env.ps1
@@ -205,192 +198,140 @@ npm run build
 npm start
 ```
 
-If PowerShell blocks script execution, run this in the same terminal session:
+PowerShellの実行ポリシーで止まる場合:
 
 ```powershell
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 .\scripts\check-env.ps1
 ```
 
-After startup, test from Discord:
+Slash Commandを追加・変更したときは、Bot起動前に必ず登録し直す。
+
+```powershell
+npm run register
+```
+
+## 起動後の確認
+
+Discordで次を実行する。
 
 ```text
 /bot-health
 /git-status
 ```
 
-Then submit a small article job:
+小さな記事jobの例:
 
 ```text
 /article query:"水分補給の基礎をEBE記事として作成する"
 ```
 
-Queue the 10 daily news briefings manually:
+複数記事jobの例:
 
 ```text
-/daily-news
-/daily-news date:"2026-05-02"
+/multi_article query:"英文法を網羅" count:15
 ```
 
-The scheduled daily news runner queues the same 10 jobs at 06:00 JST when enabled. It refuses to queue if any article for that date already exists under `11_Daily/`, or if non-failed daily jobs for that date already exist in the queue/history.
+Vaultルートで自由にCodexを実行する例:
 
-## Environment Variables
-
-Required:
-
-```env
-DISCORD_TOKEN=
-DISCORD_CLIENT_ID=
-DISCORD_GUILD_ID=
-DISCORD_ADMIN_USER_IDS=
-EBE_VAULT_ROOT=
-EBE_WORKTREE_ROOT=
+```text
+/codex query:"10_PublishedのMOCリンク切れを確認して、問題があれば修正して"
 ```
 
-`EBE_WORKTREE_ROOT` must not be inside `EBE_VAULT_ROOT`.
-
-Useful optional settings:
-
-```env
-EBE_MAX_WORKERS=4
-EBE_MAX_PUBLISHERS=1
-EBE_RESOURCE_GUARD_ENABLED=true
-EBE_MAX_MEMORY_PERCENT=85
-EBE_MAX_CPU_PERCENT=95
-EBE_DAILY_NEWS_ENABLED=true
-DISCORD_DAILY_NEWS_CHANNEL_ID=
-EBE_DAILY_NEWS_HOUR_JST=6
-EBE_DAILY_NEWS_MINUTE_JST=0
-EBE_KEEP_FAILED_WORKTREES=true
-EBE_KEEP_SUCCESSFUL_WORKTREES=false
-```
-
-The resource guard may delay new jobs if memory or CPU usage is high.
-
-## Slash Commands
-
-- `/article query:"..." mode:new`
-- `/multi_article query:"..." count:15`
-- `/codex query:"..."`
-- `/job-status job_id:"..."`
-- `/job-cancel job_id:"..."`
-- `/job-retry job_id:"..."`
-- `/daily-news date:"2026-05-02"`
-- `/job-cleanup older_than_days:7 dry_run:true`
-- `/job-list`
-- `/worker-list`
-- `/queue-pause`
-- `/queue-resume`
-- `/git-status`
-- `/git-debug action:status`
-- `/git-debug action:all`
-- `/bot-health`
-
-`/article` immediately queues a job and reports the job ID. The bot posts start, success, and failure updates to the invoking channel.
-
-`/multi_article` expands one broad theme into multiple article titles and queues each title as a normal `/article` job. For example, `/multi_article query:"英文法を網羅" count:15` queues 15 new article jobs covering that theme from overview through advanced topics.
-
-`/codex` is admin-only. It queues a freeform Codex CLI request in `EBE_VAULT_ROOT` with the configured Codex command template. It does not create a worktree and does not automatically commit or push changes.
-
-`/daily-news` is admin-only. It queues one daily news job for each of the 10 fixed fields and defaults to today's JST date.
-
-`/git-debug action:all` runs add/commit/push for the main vault and should be used sparingly. It is admin-only.
-
-`/job-cancel`, `/job-retry`, `/job-cleanup`, `/queue-pause`, and `/queue-resume` are admin-only.
-
-## Publish Flow
+## Article Jobの流れ
 
 ```text
 /article
   -> queued
-  -> worker creates git worktree
-  -> Codex runs EBE workflow in that worktree
-  -> worker commits generated durable artifacts on a job branch
-  -> publisher rebases the job branch onto the latest main
-  -> MOC-only rebase conflicts are repaired in the worker worktree
-  -> publisher serially merges job branch into main
-  -> publisher pushes to the private origin
-  -> GitHub Actions updates the public mirror
+  -> workerが外部Git worktreeを作成
+  -> CodexがEBE workflowを実行
+  -> durable artifactsがあればworker branchへcommit
+  -> publisherがmainへrebase
+  -> MOC conflictは修復処理
+  -> mainへmerge
+  -> private originへpush
 ```
+
+`/multi_article` はこの通常article jobを複数作るだけで、各jobの実行・publish判定は通常と同じ。
+
+## /codex の扱い
+
+`/codex` は通常の記事生成とは違う。`EBE_VAULT_ROOT` を直接作業ディレクトリにしてCodex CLIを起動する。
+
+用途:
+
+- Botコードや設定の小修正
+- Vault全体の調査
+- MOCやログの点検
+- 通常article flowに乗せにくい運用作業
+
+注意:
+
+- worktree分離がない。
+- 自動commit/pushしない。
+- 変更内容はmain worktreeへ直接出る。
+- 実行ログは `_working/discord_codex/<job-id>/codex-output.log` に保存される。
 
 ## Codex Command Template
 
-The prompt is sent through stdin. The default is:
+Codex CLIへのpromptはstdinで渡す。デフォルト:
 
 ```env
 CODEX_COMMAND_TEMPLATE=codex exec --model {model} -c model_reasoning_effort={effort} --cd {cwd} --dangerously-bypass-approvals-and-sandbox -
 ```
 
-If your local Codex CLI uses different flags, change only `.env`; do not edit source code. Available placeholders:
+使えるplaceholder:
 
 - `{model}`
 - `{effort}`
 - `{cwd}`
 - `{promptFile}`
 
-You can test the Codex command manually:
+手動テスト:
 
 ```powershell
 "hello" | codex exec --model gpt-5.5 -c model_reasoning_effort=low --cd "<path-to-vault-or-worktree>" --dangerously-bypass-approvals-and-sandbox -
 ```
 
-## Mobile Obsidian Reading
+## 日次ニュース
 
-This bot is designed so article generation happens on one always-on machine, while phones and tablets can read the resulting Vault.
+手動実行:
 
-Recommended pattern:
+```text
+/daily-news
+/daily-news date:"2026-05-02"
+```
+
+自動実行は `.env` で制御する。
+
+```env
+EBE_DAILY_NEWS_ENABLED=true
+DISCORD_DAILY_NEWS_CHANNEL_ID=
+EBE_DAILY_NEWS_HOUR_JST=6
+EBE_DAILY_NEWS_MINUTE_JST=0
+```
+
+同じ日付の記事がすでに `11_Daily/` にある場合や、同日付の未失敗jobが残っている場合は重複投入を避ける。
+
+## モバイルObsidianで読む
+
+記事生成はBotを動かすPCに集約し、スマホやタブレットは読むだけにすると衝突が少ない。
+
+おすすめ:
 
 ```text
 Bot host:
-  clone private repository
-  generate articles
-  push changes
+  generate / commit / push
 
 iPhone / Android:
-  pull or sync private repository
-  read in Obsidian
+  pull or sync / read
 ```
 
-### Option A: Obsidian Sync
+Obsidian Syncを使う場合は、同じVaultを同期するだけでよい。Git連携を使う場合、モバイル側はpull中心にする。
 
-Use Obsidian Sync if you want the simplest mobile setup.
+## Windowsで自動起動
 
-1. Open the Vault on the bot host or desktop.
-2. Enable Obsidian Sync for the Vault.
-3. Install Obsidian on iPhone or Android.
-4. Sign in to the same Obsidian account.
-5. Open the synced Vault.
-
-This avoids mobile Git setup. Make sure the bot host remains the only machine that generates and pushes articles.
-
-### Option B: Git-Based Mobile Pull
-
-Use a mobile Git client or Obsidian Git-compatible workflow if you prefer repository-based sync.
-
-Recommended mobile policy:
-
-```text
-mobile devices: pull/read
-bot host: generate/commit/push
-```
-
-This avoids merge conflicts caused by editing the same Vault from multiple devices.
-
-General steps:
-
-1. Install Obsidian on iPhone or Android.
-2. Install or configure a Git sync method for the device.
-3. Clone or pull the private repository onto the device.
-4. Open the cloned folder as an Obsidian Vault.
-5. Pull after the bot finishes article generation.
-
-Use a read-only or limited token on mobile when possible.
-
-## Run At Startup
-
-On Windows, Task Scheduler can start the bot automatically.
-
-Suggested action:
+Task Schedulerを使う。
 
 ```text
 Program:
@@ -403,30 +344,28 @@ Start in:
   <path-to-repo>\automation\discord_bot
 ```
 
-Use "At log on" first while testing. Switch to "At startup" after the setup is stable.
+最初は「ログオン時」で試し、安定してから「スタートアップ時」にする。
 
-## Operational Notes
+## 運用メモ
 
-- Keep the main vault worktree clean while the bot is running.
-- Article generation is parallel, but shared MOC/index files are still a natural conflict point.
-- Before publishing, the bot rebases each worker branch onto the latest main. MOC-only conflicts are resolved in the worker worktree and followed by a MOC repair Codex pass.
-- If a non-MOC conflict occurs, the job becomes `failed_review_required`; its worktree is kept by default.
-- Failed worktrees are kept when `EBE_KEEP_FAILED_WORKTREES=true`.
-- Successful worktrees are removed by default.
-- If a queued job does not start even though fewer than four workers are running, check resource guard logs in `logs/`.
-- If the bot appears to start every job as `slot: 1/4`, make sure only one bot process is running.
-- If the bot stops while a job is active, the next startup marks interrupted `running`, `waiting_publish`, and `publishing` jobs as `failed_review_required`. Use `/job-retry` to create a fresh queued copy.
+- Botを複数プロセスで起動しない。
+- main worktreeを手作業で大きく変更している間は、記事jobのpublish conflictが増えやすい。
+- private repositoryへpushすると、既存のひな形public mirrorとは別に、公開記事用repositoryへ `10_Published/`、`11_Daily/`、関連MOC/index、参照assetsだけを同期できる。GitHub側で `PUBLIC_ARTICLES_TOKEN` と `PUBLIC_ARTICLES_REPOSITORY` を設定する。
+- resource guardが有効な場合、CPUやmemory使用率が高いと新しいjob開始を遅らせる。
+- 失敗worktreeは `EBE_KEEP_FAILED_WORKTREES=true` なら残る。
+- 成功worktreeは通常削除される。
+- Bot停止中にrunningだったjobは、次回起動時に `failed_review_required` になる。必要なら `/job-retry` を使う。
 
-## Troubleshooting
+## トラブルシュート
 
-Check whether multiple bot processes are running on Windows:
+Nodeプロセス確認:
 
 ```powershell
 Get-CimInstance Win32_Process -Filter "name = 'node.exe'" |
   Select-Object ProcessId, CommandLine
 ```
 
-Stop duplicate bot processes:
+重複Bot停止:
 
 ```powershell
 Get-CimInstance Win32_Process -Filter "name = 'node.exe'" |
@@ -434,15 +373,21 @@ Get-CimInstance Win32_Process -Filter "name = 'node.exe'" |
   ForEach-Object { Stop-Process -Id $_.ProcessId }
 ```
 
-Read runtime logs:
+ログ確認:
 
 ```powershell
 Get-ChildItem .\logs
 Get-Content .\logs\*.log
 ```
 
-If Codex fails, inspect the job worktree log:
+記事jobのCodexログ:
 
 ```powershell
 notepad "<worktree-root>\<job-id>\_working\discord_jobs\<job-id>-codex-output.log"
+```
+
+`/codex` のCodexログ:
+
+```powershell
+notepad "<vault-root>\_working\discord_codex\<job-id>\codex-output.log"
 ```
