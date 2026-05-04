@@ -1,7 +1,16 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { config } from "../config.js";
-import type { ArticleMode, BotState, DailyNewsMeta, Job, JobStatus, JobType, MocMaintenanceMeta } from "../types.js";
+import type {
+  ArticleMode,
+  BotState,
+  DailyNewsMeta,
+  ImageMaintenanceMeta,
+  Job,
+  JobStatus,
+  JobType,
+  MocMaintenanceMeta,
+} from "../types.js";
 import { ensureDir, safeJobId } from "../utils/paths.js";
 
 interface StoreData {
@@ -37,6 +46,7 @@ export class JobStore {
     jobType?: JobType;
     daily?: DailyNewsMeta;
     mocMaintenance?: MocMaintenanceMeta;
+    imageMaintenance?: ImageMaintenanceMeta;
   }): Promise<Job> {
     return this.withLock(async () => {
       const data = await this.read();
@@ -56,6 +66,7 @@ export class JobStore {
         reasoningEffort: input.reasoningEffort,
         daily: input.daily,
         mocMaintenance: input.mocMaintenance,
+        imageMaintenance: input.imageMaintenance,
       };
       data.jobs.push(job);
       await this.write(data);
@@ -75,6 +86,7 @@ export class JobStore {
       jobType?: JobType;
       daily?: DailyNewsMeta;
       mocMaintenance?: MocMaintenanceMeta;
+      imageMaintenance?: ImageMaintenanceMeta;
     }[],
   ): Promise<Job[]> {
     return this.withLock(async () => {
@@ -95,6 +107,7 @@ export class JobStore {
         reasoningEffort: input.reasoningEffort,
         daily: input.daily,
         mocMaintenance: input.mocMaintenance,
+        imageMaintenance: input.imageMaintenance,
       }));
       data.jobs.push(...jobs);
       await this.write(data);
@@ -192,6 +205,7 @@ export class JobStore {
         reasoningEffort: source.reasoningEffort,
         daily: source.daily,
         mocMaintenance: source.mocMaintenance,
+        imageMaintenance: source.imageMaintenance,
         resultSummary: `Retry of ${source.id}`,
       };
       data.jobs.push(job);

@@ -5,6 +5,7 @@ import type { WorkerPool } from "../queue/workerPool.js";
 import { gitStatus, debugSyncMain } from "../runners/gitPublisher.js";
 import { assertAdmin } from "../services/accessControl.js";
 import { enqueueDailyNewsJobs } from "../services/dailyNews.js";
+import { enqueueImageMaintenanceJob } from "../services/imageMaintenance.js";
 import { enqueueMocMaintenanceJob } from "../services/mocMaintenance.js";
 import { resourceSnapshot } from "../services/resourceGuard.js";
 import type { Job } from "../types.js";
@@ -149,6 +150,26 @@ export function createDiscordClient(store: JobStore, getWorkerPool: () => Worker
             `model: \`${job.model} ${job.reasoningEffort}\``,
           ].join("\n"),
         );
+      } else if (interaction.commandName === "image_maintenance") {
+        assertAdmin(interaction.user.id);
+        const scope = (interaction.options.getString("scope") ?? "all") as "all" | "published" | "daily";
+        const job = await enqueueImageMaintenanceJob(store, {
+          channelId: interaction.channelId,
+          guildId: interaction.guildId,
+          discordUserId: interaction.user.id,
+          scope,
+        });
+        const queued = await store.countByStatus("queued");
+        await interaction.reply(
+          [
+            "Image maintenance queued.",
+            `job: \`${job.id}\``,
+            `scope: \`${scope}\``,
+            `queued: \`${queued}\``,
+            `workers: \`${config.workers.maxWorkers}\``,
+            `model: \`${job.model} ${job.reasoningEffort}\``,
+          ].join("\n"),
+        );
       } else if (interaction.commandName === "job-cleanup") {
         assertAdmin(interaction.user.id);
         const olderThanDays = interaction.options.getInteger("older_than_days") ?? 7;
@@ -240,6 +261,7 @@ function formatJob(job: Job): string {
     job.jobType ? `type: \`${job.jobType}\`` : undefined,
     job.daily ? `daily: \`${job.daily.date} ${job.daily.directoryName}\`` : undefined,
     job.mocMaintenance ? `moc_scope: \`${job.mocMaintenance.scope}\`` : undefined,
+    job.imageMaintenance ? `image_scope: \`${job.imageMaintenance.scope}\`` : undefined,
     `created: \`${job.createdAt}\``,
     job.startedAt ? `started: \`${job.startedAt}\`` : undefined,
     job.finishedAt ? `finished: \`${job.finishedAt}\`` : undefined,

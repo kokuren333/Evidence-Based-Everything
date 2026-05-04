@@ -76,7 +76,7 @@ field: Field_Name
 updated: yyyy-mm-dd
 ---
 
-![[daily-news-infographic.png]]
+![[50_Assets/Infographics/Daily/{yyyy-mm-dd}_{field-slug}.png]]
 
 # yyyy-mm-dd Field Name Daily Briefing
 

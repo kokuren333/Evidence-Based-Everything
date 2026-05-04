@@ -107,6 +107,34 @@ function buildPrompt(job: Job): string {
     ].join("\n");
   }
 
+  if (job.jobType === "image_maintenance") {
+    const scope = job.imageMaintenance?.scope ?? "all";
+    return [
+      "Follow this Vault's AGENTS.md and EBE image/infographic rules.",
+      "",
+      "Task: inspect and repair article image paths.",
+      `job_type: ${job.jobType}`,
+      `job_id: ${job.id}`,
+      `scope: ${scope}`,
+      "",
+      "Required workflow:",
+      "- Read AGENTS.md, .agents/skills/ebe-orchestrator/SKILL.md, .agents/skills/EBE-SHARED-CONTRACT.md, .agents/skills/ebe-imagegen-infographic/SKILL.md, and .agents/skills/news-skills/SKILL.md.",
+      "- Scan Markdown image embeds in the requested scope: Obsidian embeds like ![[...png]] and Markdown image links like ![alt](...).",
+      "- If scope is all or published, inspect 10_Published/ article files. If scope is all or daily, inspect 11_Daily/ article files.",
+      "- Verify each referenced image exists inside the Vault. Fix broken, basename-only, or ambiguous article image embeds by using stable vault-relative paths.",
+      "- Daily news top infographics should use 50_Assets/Infographics/Daily/{yyyy-mm-dd}_{field-slug}.png when that copied raster PNG exists.",
+      "- Published evergreen infographics should use 50_Assets/Infographics/{filename}.png when that copied raster PNG exists.",
+      "- Prefer repairing links to existing copied raster images. Do not generate new images unless no usable copied image exists and the EBE imagegen publish rule requires one.",
+      "- Do not edit unrelated article prose, MOCs unless image links inside them are directly broken, or automation/discord_bot files during this worker job.",
+      "- Write a maintenance log under 70_Logs/infographic_logs/ with scanned article count, fixed embed count, unresolved issue count, changed files, and verification result.",
+      "- Before finishing, verify that no target article still has a missing image path.",
+      "",
+      "User request:",
+      job.query,
+      "",
+    ].join("\n");
+  }
+
   if (job.jobType === "daily_news") {
     if (!job.daily) throw new Error("Daily news job is missing daily metadata");
     return [

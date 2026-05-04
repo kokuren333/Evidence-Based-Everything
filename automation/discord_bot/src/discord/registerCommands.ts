@@ -71,6 +71,20 @@ const commands = [
         ),
     ),
   new SlashCommandBuilder()
+    .setName("image_maintenance")
+    .setDescription("Admin-only: inspect and repair broken article image paths.")
+    .addStringOption((option) =>
+      option
+        .setName("scope")
+        .setDescription("Which article set to inspect. Defaults to all.")
+        .setRequired(false)
+        .addChoices(
+          { name: "all", value: "all" },
+          { name: "published", value: "published" },
+          { name: "daily", value: "daily" },
+        ),
+    ),
+  new SlashCommandBuilder()
     .setName("job-cleanup")
     .setDescription("Admin-only: list or remove old failed job worktrees.")
     .addIntegerOption((option) =>

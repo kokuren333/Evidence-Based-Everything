@@ -83,6 +83,7 @@ Discord /article
 - `/codex query:"..."`: 管理者専用。VaultルートでCodex CLIを直接実行する。通常の記事publish flowとは別で、worktree作成や自動pushはしない。
 - `/daily-news`: 管理者専用。日次ニュース記事をまとめてキューに入れる。
 - `/moc-maintenance`: 管理者専用。公開記事や日次記事のMOCを再構成する。
+- `/image_maintenance`: 管理者専用。公開記事や日次記事の画像パスを点検・修復する。記事生成後にも画像パス検査が走り、壊れた画像参照が残るjobはpublishされない。
 
 Bot本体は `automation/discord_bot/` にある。詳しいセットアップは `automation/discord_bot/README.md` を参照する。
 

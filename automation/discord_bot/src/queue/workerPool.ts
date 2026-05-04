@@ -1,5 +1,6 @@
 import { config } from "../config.js";
 import { commitWorkerChanges, publishWorkerBranch } from "../runners/gitPublisher.js";
+import { assertArticleImagePaths } from "../runners/imagePathChecker.js";
 import { assertMocIntegrity } from "../runners/mocIntegrityChecker.js";
 import { hasDurableArticleChanges } from "../runners/publishGateChecker.js";
 import { runCodexForJob } from "../runners/codexRunner.js";
@@ -118,6 +119,10 @@ export class WorkerPool {
         await runCodexForJob(job, activeWorker?.abortController.signal);
         if (job.jobType === "moc_maintenance") {
           await assertMocIntegrity(job.worktreePath!);
+        }
+        if (["article", "daily_news", "image_maintenance"].includes(job.jobType ?? "article")) {
+          const scope = job.jobType === "daily_news" ? "daily" : (job.imageMaintenance?.scope ?? "all");
+          await assertArticleImagePaths(job.worktreePath!, scope);
         }
         await this.throwIfCancelled(job.id);
         if (!(await hasDurableArticleChanges(job.worktreePath!))) {

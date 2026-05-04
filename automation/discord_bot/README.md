@@ -41,6 +41,12 @@ Discord command
   - 公開記事・日次記事のMOCを再構成する。
   - `scope` は `all`、`published`、`daily`。
 
+- `/image_maintenance scope:all`
+  - 管理者専用。
+  - 公開記事・日次記事の画像パスを点検・修復する。
+  - `scope` は `all`、`published`、`daily`。
+  - `/article`、`/daily-news`、`/image_maintenance` のjobはcommit/push前に画像パス検査を通し、未解決の画像参照が残る場合はpublishを止める。
+
 - `/job-status job_id:"..."`
   - jobの状態、worktree、エラー、commitなどを確認する。
 
@@ -86,7 +92,7 @@ Discord command
 - Discord token、GitHub token、Codex認証情報をrepositoryに入れない。
 - `data/`、`logs/`、`node_modules/`、`dist/` はローカル専用。
 - worker worktreeはVault repositoryの外に作る。
-- `/codex`、`/daily-news`、`/moc-maintenance`、`/job-cancel`、`/job-retry`、`/queue-pause`、`/queue-resume`、`/git-debug`、`/job-cleanup` は管理者向け。
+- `/codex`、`/daily-news`、`/moc-maintenance`、`/image_maintenance`、`/job-cancel`、`/job-retry`、`/queue-pause`、`/queue-resume`、`/git-debug`、`/job-cleanup` は管理者向け。
 - 管理者は `.env` の `DISCORD_ADMIN_USER_IDS` にDiscord user IDをカンマ区切りで設定する。
 
 ## ディレクトリ構造

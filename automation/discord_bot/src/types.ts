@@ -9,7 +9,7 @@ export type JobStatus =
   | "cancelled";
 
 export type ArticleMode = "new" | "update";
-export type JobType = "article" | "daily_news" | "moc_maintenance" | "codex";
+export type JobType = "article" | "daily_news" | "moc_maintenance" | "image_maintenance" | "codex";
 
 export interface DailyNewsMeta {
   date: string;
@@ -22,6 +22,10 @@ export interface DailyNewsMeta {
 }
 
 export interface MocMaintenanceMeta {
+  scope: "all" | "published" | "daily";
+}
+
+export interface ImageMaintenanceMeta {
   scope: "all" | "published" | "daily";
 }
 
@@ -49,6 +53,7 @@ export interface Job {
   cancelRequested?: boolean;
   daily?: DailyNewsMeta;
   mocMaintenance?: MocMaintenanceMeta;
+  imageMaintenance?: ImageMaintenanceMeta;
 }
 
 export interface ShellResult {
