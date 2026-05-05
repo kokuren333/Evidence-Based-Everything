@@ -20,7 +20,7 @@
 - [[10_Published/10_Life_Design_Practice_Creative_Work/_MOC.md|10_Life_Design_Practice_Creative_Work]] - 3 subfields, 3 articles
 
 ## Taxonomy Coverage
-- Last rebuilt: 2026-05-05 10:13:48 +09:00
+- Last rebuilt: 2026-05-06 06:22:09 +09:00
 - Coverage source: `10_Published/` filesystem tree
 - Total published articles: 44
 - Total subfields: 28
