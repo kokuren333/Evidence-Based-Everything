@@ -3,6 +3,7 @@ import path from "node:path";
 import { config } from "../config.js";
 import type { Job } from "../types.js";
 import { quoteForShell, runCommand } from "../utils/shell.js";
+import { assertMocIntegrity } from "./mocIntegrityChecker.js";
 
 export async function runCodexForJob(job: Job, signal?: AbortSignal): Promise<void> {
   if (job.jobType === "codex") {
@@ -34,6 +35,8 @@ export async function runCodexForJob(job: Job, signal?: AbortSignal): Promise<vo
   if (result.code !== 0) {
     throw new Error(`Codex command failed (${result.code}). See ${logFile}`);
   }
+
+  await assertMocIntegrity(job.worktreePath);
 }
 
 export async function runCodexForRootQuery(job: Job, signal?: AbortSignal): Promise<void> {
@@ -62,6 +65,8 @@ export async function runCodexForRootQuery(job: Job, signal?: AbortSignal): Prom
   if (result.code !== 0) {
     throw new Error(`Codex command failed (${result.code}). See ${logFile}`);
   }
+
+  await assertMocIntegrity(cwd);
 }
 
 function buildPrompt(job: Job): string {
@@ -69,6 +74,7 @@ function buildPrompt(job: Job): string {
     return [
       "Run this request from the Vault root directory with full Codex CLI permissions.",
       "Follow AGENTS.md and local instructions when they apply.",
+      "Write all Markdown files as UTF-8. Before finishing, scan edited Markdown for mojibake such as 縺, 繧, 繝, 譁, 邵, 郢, 隴, �, or ??? and repair it.",
       "",
       `job_type: ${job.jobType}`,
       `job_id: ${job.id}`,
@@ -97,7 +103,7 @@ function buildPrompt(job: Job): string {
       "- If scope is all or daily, inspect 11_Daily/. Rebuild the root daily MOC and field/month MOCs so every daily article is reachable by field and date.",
       "- Prefer systematic Obsidian maps over simple update-order lists. Date-based sections are appropriate for Daily MOCs.",
       "- Create missing _MOC.md files when needed.",
-      "- Write all MOC files as UTF-8. Before finishing, scan generated MOCs for mojibake such as 縺, 繧, 繝, 譁, �, or ??? and repair any corrupted text.",
+      "- Write all MOC files as UTF-8. Before finishing, scan generated MOCs for mojibake such as 縺, 繧, 繝, 譁, 邵, 郢, 隴, �, or ??? and repair any corrupted text.",
       "- Write a maintenance log under 70_Logs/taxonomy_logs/ with coverage counts, changed files, and verification results.",
       "- Do not edit automation/discord_bot files during this worker job.",
       "",
@@ -138,7 +144,7 @@ function buildPrompt(job: Job): string {
   if (job.jobType === "daily_news") {
     if (!job.daily) throw new Error("Daily news job is missing daily metadata");
     return [
-      "このVaultのAGENTS.md、.agents/skills/EBE-SHARED-CONTRACT.md、.agents/skills/news-skills/SKILL.md に従い、EBE Daily News workflowを自走完了してください。",
+      "このVaultのAGENTS.md、.agents/skills/EBE-SHARED-CONTRACT.md、.agents/skills/news-skills/SKILL.mdに従い、EBE Daily News workflowを自走完了してください。",
       "",
       "重要条件:",
       "- 通常の 10_Published/ 記事ではなく、ニュース用フォーマットで 11_Daily/ に保存する。",
@@ -148,6 +154,7 @@ function buildPrompt(job: Job): string {
       "- 参考ソースには番号、URL、Accessed date を入れる。",
       "- 日本語インフォグラフィックを imagegen で生成し、実ラスターPNGを 50_Assets/Infographics/Daily/ に保存し、記事冒頭にObsidian画像リンクで挿入する。",
       "- imagegenが使えない、または日本語ラベルが判読不能な場合は 11_Daily/ にpublishせず、_working/infographic_briefs/ に停止理由とpromptを保存する。",
+      "- 文字化けを絶対に残さない。保存前に本文、見出し、参考ソース、更新履歴、MOCをUTF-8で読み返し、縺、繧、繝、譁、邵、郢、隴、�、??? などのmojibakeがあれば修復する。",
       "- Discord Bot 実装ファイルは変更しない。",
       "",
       `job_type: ${job.jobType}`,
@@ -170,10 +177,11 @@ function buildPrompt(job: Job): string {
     "重要条件:",
     "- 新規記事作成または更新として、必要なEBE Skillsを順に使う。",
     "- Publish Gateを満たした場合のみ 10_Published/ に保存する。",
-    "- _working/ は一時作業場として使ってよいが、最終成果物は正式配置する。",
+    "- _working/ は一時作業場所として使ってよいが、最終成果物は正規配置する。",
     "- 日本語インフォグラフィックが必要な場合はAGENTS.mdのimagegenルールに従う。",
     "- ユーザーへの途中許可確認は不要。安全性・合法性・破壊的変更リスクが未解決の場合だけ停止し、レポートを残す。",
-    "- 実装基盤やDiscord Botのコードは変更しない。",
+    "- 文字化けを残さない。保存前にUTF-8で読み返し、縺、繧、繝、譁、邵、郢、隴、�、??? などのmojibakeがあれば修復する。",
+    "- 実装基盤やDiscord Botのコードは、依頼に直接必要な場合だけ変更する。",
     "",
     `mode: ${job.mode}`,
     `job_id: ${job.id}`,
