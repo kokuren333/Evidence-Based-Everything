@@ -8,19 +8,19 @@
 - [[60_MOCs/MOC - Recently Updated.md|MOC - Recently Updated]]
 
 ## Published Category MOCs
-- [[10_Published/01_Life_Health_Medicine/_MOC.md|生命・健康・医学 (01_Life_Health_Medicine)]] - 12 subfields, 26 articles
-- [[10_Published/02_Mind_Education_Human_Development/_MOC.md|心理・教育・人間発達 (02_Mind_Education_Human_Development)]] - 4 subfields, 4 articles
-- [[10_Published/03_Society_Policy_Law_Governance/_MOC.md|社会・政策・法・ガバナンス (03_Society_Policy_Law_Governance)]] - 1 subfields, 1 articles
-- [[10_Published/04_Economy_Business_Work/_MOC.md|経済・ビジネス・仕事 (04_Economy_Business_Work)]] - 1 subfields, 1 articles
-- [[10_Published/05_Nature_Science_Environment/_MOC.md|自然科学・環境 (05_Nature_Science_Environment)]] - 1 subfields, 1 articles
-- [[10_Published/06_Mathematics_Logic_Formal_Systems/_MOC.md|数学・論理・形式体系 (06_Mathematics_Logic_Formal_Systems)]] - 0 subfields, 0 articles
-- [[10_Published/07_Technology_Engineering_Computing_AI/_MOC.md|技術・工学・コンピューティング・AI (07_Technology_Engineering_Computing_AI)]] - 5 subfields, 6 articles
-- [[10_Published/08_Humanities_History_Culture_Arts/_MOC.md|人文・歴史・文化・芸術 (08_Humanities_History_Culture_Arts)]] - 1 subfields, 1 articles
-- [[10_Published/09_Information_Media_OSINT_Security/_MOC.md|情報・メディア・OSINT・セキュリティ (09_Information_Media_OSINT_Security)]] - 0 subfields, 0 articles
-- [[10_Published/10_Life_Design_Practice_Creative_Work/_MOC.md|ライフデザイン・実践・創作 (10_Life_Design_Practice_Creative_Work)]] - 3 subfields, 3 articles
+- [[10_Published/01_Life_Health_Medicine/_MOC.md|01_Life_Health_Medicine]] - 12 subfields, 26 articles
+- [[10_Published/02_Mind_Education_Human_Development/_MOC.md|02_Mind_Education_Human_Development]] - 4 subfields, 4 articles
+- [[10_Published/03_Society_Policy_Law_Governance/_MOC.md|03_Society_Policy_Law_Governance]] - 1 subfields, 1 articles
+- [[10_Published/04_Economy_Business_Work/_MOC.md|04_Economy_Business_Work]] - 1 subfields, 1 articles
+- [[10_Published/05_Nature_Science_Environment/_MOC.md|05_Nature_Science_Environment]] - 1 subfields, 1 articles
+- [[10_Published/06_Mathematics_Logic_Formal_Systems/_MOC.md|06_Mathematics_Logic_Formal_Systems]] - 0 subfields, 0 articles
+- [[10_Published/07_Technology_Engineering_Computing_AI/_MOC.md|07_Technology_Engineering_Computing_AI]] - 5 subfields, 6 articles
+- [[10_Published/08_Humanities_History_Culture_Arts/_MOC.md|08_Humanities_History_Culture_Arts]] - 1 subfields, 1 articles
+- [[10_Published/09_Information_Media_OSINT_Security/_MOC.md|09_Information_Media_OSINT_Security]] - 0 subfields, 0 articles
+- [[10_Published/10_Life_Design_Practice_Creative_Work/_MOC.md|10_Life_Design_Practice_Creative_Work]] - 3 subfields, 3 articles
 
 ## Taxonomy Coverage
-- Last rebuilt: 2026-05-05 00:00:00 +09:00
+- Last rebuilt: 2026-05-05 10:13:48 +09:00
 - Coverage source: `10_Published/` filesystem tree
 - Total published articles: 43
 - Total subfields: 28
