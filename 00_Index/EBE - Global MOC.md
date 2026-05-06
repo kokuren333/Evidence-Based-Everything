@@ -8,7 +8,7 @@
 - [[60_MOCs/MOC - Recently Updated.md|MOC - Recently Updated]]
 
 ## Published Category MOCs
-- [[10_Published/01_Life_Health_Medicine/_MOC.md|01_Life_Health_Medicine]] - 12 subfields, 28 articles
+- [[10_Published/01_Life_Health_Medicine/_MOC.md|01_Life_Health_Medicine]] - 13 subfields, 29 articles
 - [[10_Published/02_Mind_Education_Human_Development/_MOC.md|02_Mind_Education_Human_Development]] - 4 subfields, 5 articles
 - [[10_Published/03_Society_Policy_Law_Governance/_MOC.md|03_Society_Policy_Law_Governance]] - 1 subfields, 1 articles
 - [[10_Published/04_Economy_Business_Work/_MOC.md|04_Economy_Business_Work]] - 1 subfields, 1 articles
@@ -22,8 +22,8 @@
 ## Taxonomy Coverage
 - Last rebuilt: 2026-05-07
 - Coverage source: `10_Published/` filesystem tree
-- Total published articles: 48
-- Total subfields: 29
+- Total published articles: 49
+- Total subfields: 30
 
 ## Coverage Check
 - All 10 major categories are linked.
