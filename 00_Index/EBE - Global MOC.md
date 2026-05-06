@@ -14,21 +14,25 @@
 - [[10_Published/04_Economy_Business_Work/_MOC.md|04_Economy_Business_Work]] - 1 subfields, 1 articles
 - [[10_Published/05_Nature_Science_Environment/_MOC.md|05_Nature_Science_Environment]] - 1 subfields, 1 articles
 - [[10_Published/06_Mathematics_Logic_Formal_Systems/_MOC.md|06_Mathematics_Logic_Formal_Systems]] - 0 subfields, 0 articles
-- [[10_Published/07_Technology_Engineering_Computing_AI/_MOC.md|07_Technology_Engineering_Computing_AI]] - 5 subfields, 6 articles
+- [[10_Published/07_Technology_Engineering_Computing_AI/_MOC.md|07_Technology_Engineering_Computing_AI]] - 6 subfields, 8 articles
 - [[10_Published/08_Humanities_History_Culture_Arts/_MOC.md|08_Humanities_History_Culture_Arts]] - 1 subfields, 1 articles
 - [[10_Published/09_Information_Media_OSINT_Security/_MOC.md|09_Information_Media_OSINT_Security]] - 0 subfields, 0 articles
 - [[10_Published/10_Life_Design_Practice_Creative_Work/_MOC.md|10_Life_Design_Practice_Creative_Work]] - 3 subfields, 3 articles
 
 ## Taxonomy Coverage
-- Last rebuilt: 2026-05-06 06:22:09 +09:00
+- Last rebuilt: 2026-05-07
 - Coverage source: `10_Published/` filesystem tree
-- Total published articles: 44
-- Total subfields: 28
+- Total published articles: 46
+- Total subfields: 29
 
 ## Coverage Check
 - All 10 major categories are linked.
 - Published articles are reachable through category and subfield MOCs.
 
 ## Latest Added Route
+- [[10_Published/07_Technology_Engineering_Computing_AI/機械学習予測__machine-learning-prediction/_MOC.md|機械学習予測]]
+- [[10_Published/07_Technology_Engineering_Computing_AI/機械学習予測__machine-learning-prediction/公営競技で優れたモデルを構築できればオッズを見なくても勝てるか__public-sports-model-odds-expected-value.md|公営競技で優れたモデルを構築できればオッズを見なくても勝てるか]]
+
+## Previous Added Route
 - [[10_Published/07_Technology_Engineering_Computing_AI/機械学習予測__machine-learning-prediction/_MOC.md|機械学習予測]]
 - [[10_Published/07_Technology_Engineering_Computing_AI/機械学習予測__machine-learning-prediction/競輪の機械学習予測についてわかっていること__keirin-machine-learning-prediction.md|競輪の機械学習予測についてわかっていること]]
