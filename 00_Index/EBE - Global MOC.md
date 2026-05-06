@@ -8,7 +8,7 @@
 - [[60_MOCs/MOC - Recently Updated.md|MOC - Recently Updated]]
 
 ## Published Category MOCs
-- [[10_Published/01_Life_Health_Medicine/_MOC.md|01_Life_Health_Medicine]] - 12 subfields, 26 articles
+- [[10_Published/01_Life_Health_Medicine/_MOC.md|01_Life_Health_Medicine]] - 12 subfields, 27 articles
 - [[10_Published/02_Mind_Education_Human_Development/_MOC.md|02_Mind_Education_Human_Development]] - 4 subfields, 5 articles
 - [[10_Published/03_Society_Policy_Law_Governance/_MOC.md|03_Society_Policy_Law_Governance]] - 1 subfields, 1 articles
 - [[10_Published/04_Economy_Business_Work/_MOC.md|04_Economy_Business_Work]] - 1 subfields, 1 articles
@@ -22,17 +22,9 @@
 ## Taxonomy Coverage
 - Last rebuilt: 2026-05-07
 - Coverage source: `10_Published/` filesystem tree
-- Total published articles: 46
+- Total published articles: 47
 - Total subfields: 29
 
 ## Coverage Check
 - All 10 major categories are linked.
 - Published articles are reachable through category and subfield MOCs.
-
-## Latest Added Route
-- [[10_Published/07_Technology_Engineering_Computing_AI/機械学習予測__machine-learning-prediction/_MOC.md|機械学習予測]]
-- [[10_Published/07_Technology_Engineering_Computing_AI/機械学習予測__machine-learning-prediction/公営競技で優れたモデルを構築できればオッズを見なくても勝てるか__public-sports-model-odds-expected-value.md|公営競技で優れたモデルを構築できればオッズを見なくても勝てるか]]
-
-## Previous Added Route
-- [[10_Published/07_Technology_Engineering_Computing_AI/機械学習予測__machine-learning-prediction/_MOC.md|機械学習予測]]
-- [[10_Published/07_Technology_Engineering_Computing_AI/機械学習予測__machine-learning-prediction/競輪の機械学習予測についてわかっていること__keirin-machine-learning-prediction.md|競輪の機械学習予測についてわかっていること]]
