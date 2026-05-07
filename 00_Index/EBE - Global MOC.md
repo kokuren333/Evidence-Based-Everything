@@ -1,14 +1,19 @@
-# EBE - Global MOC
+﻿# EBE - Global MOC
 
-> Rebuilt by taxonomy repair job job-20260507232548-6sbghy on 2026-05-08.
+> Rebuilt by taxonomy repair job job-20260507232548-5oyk3z on 2026-05-08.
 
 ## Core Indexes
 
-- [[10_Published/_MOC.md|Published Root MOC]]
-- [[60_MOCs/MOC - All Published.md|MOC - All Published]]
-- [[60_MOCs/MOC - All Sources.md|MOC - All Sources]]
-- [[60_MOCs/MOC - All Claims.md|MOC - All Claims]]
-- [[60_MOCs/MOC - Recently Updated.md|MOC - Recently Updated]]
+- 
+[[10_Published/_MOC.md|Published Root MOC]]
+- 
+[[60_MOCs/MOC - All Published.md|MOC - All Published]]
+- 
+[[60_MOCs/MOC - All Sources.md|MOC - All Sources]]
+- 
+[[60_MOCs/MOC - All Claims.md|MOC - All Claims]]
+- 
+[[60_MOCs/MOC - Recently Updated.md|MOC - Recently Updated]]
 
 ## Published Category MOCs
 
@@ -26,7 +31,7 @@
 ## Taxonomy Coverage
 
 - Last rebuilt: 2026-05-08
-- Repair job: job-20260507232548-6sbghy
+- Repair job: job-20260507232548-5oyk3z
 - Coverage source: `10_Published/` filesystem tree
 - Total published articles: 57
 - Total subfields: 32
