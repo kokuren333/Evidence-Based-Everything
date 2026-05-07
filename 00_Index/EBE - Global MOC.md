@@ -1,5 +1,7 @@
 # EBE - Global MOC
 
+> Updated by EBE workflow job-20260507053047-urq2wm on 2026-05-07.
+
 ## Core Indexes
 - [[10_Published/_MOC.md|Published Root MOC]]
 - [[60_MOCs/MOC - All Published.md|MOC - All Published]]
@@ -8,6 +10,7 @@
 - [[60_MOCs/MOC - Recently Updated.md|MOC - Recently Updated]]
 
 ## Published Category MOCs
+- [[10_Published/01_Life_Health_Medicine/_MOC.md|生命・健康・医学]] - includes [[10_Published/01_Life_Health_Medicine/腎臓内科__nephrology/_MOC.md|腎臓内科]]
 - [[10_Published/01_Life_Health_Medicine/_MOC.md|?????????01_Life_Health_Medicine?]] - 15 subfields, 36 articles
 - [[10_Published/02_Mind_Education_Human_Development/_MOC.md|???????????02_Mind_Education_Human_Development?]] - 4 subfields, 5 articles
 - [[10_Published/03_Society_Policy_Law_Governance/_MOC.md|??????????????03_Society_Policy_Law_Governance?]] - 1 subfields, 1 articles
@@ -21,9 +24,14 @@
 
 ## Taxonomy Coverage
 - Last rebuilt: 2026-05-07
+- Last workflow update: 2026-05-07 job-20260507053047-urq2wm
 - Coverage source: `10_Published/` filesystem tree
 - Total published articles: 56
 - Total subfields: 32
+
+## Newly Published
+
+- [[10_Published/01_Life_Health_Medicine/腎臓内科__nephrology/成人ネフローゼ症候群に対する寛解導入__adult-nephrotic-syndrome-remission-induction.md|成人ネフローゼ症候群に対する寛解導入]]
 
 ## Coverage Check
 - All 10 major categories are linked.
