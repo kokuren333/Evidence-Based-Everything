@@ -1,6 +1,6 @@
 # EBE - Global MOC
 
-> Rebuilt by taxonomy job job-20260508010616-hfs9zh on 2026-05-08.
+> Rebuilt by taxonomy job job-20260508011753-1bd51u on 2026-05-08.
 
 ## Core Indexes
 
@@ -12,7 +12,7 @@
 
 ## Published Category MOCs
 
-- [[10_Published/01_Life_Health_Medicine/_MOC.md|Life Health Medicine]] - 16 subfields, 42 articles
+- [[10_Published/01_Life_Health_Medicine/_MOC.md|Life Health Medicine]] - 16 subfields, 43 articles
 - [[10_Published/02_Mind_Education_Human_Development/_MOC.md|Mind Education Human Development]] - 4 subfields, 5 articles
 - [[10_Published/03_Society_Policy_Law_Governance/_MOC.md|Society Policy Law Governance]] - 1 subfields, 1 articles
 - [[10_Published/04_Economy_Business_Work/_MOC.md|Economy Business Work]] - 1 subfields, 1 articles
@@ -26,9 +26,9 @@
 ## Taxonomy Coverage
 
 - Last rebuilt: 2026-05-08
-- Repair job: job-20260508010616-hfs9zh
+- Repair job: job-20260508011753-1bd51u
 - Coverage source: 10_Published filesystem tree
-- Total published articles: 62
+- Total published articles: 63
 - Total subfields: 33
 - Direct articles under category roots: 0
 
