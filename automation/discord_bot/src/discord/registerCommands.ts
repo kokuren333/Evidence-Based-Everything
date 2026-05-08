@@ -122,5 +122,7 @@ const commands = [
 
 const rest = new REST({ version: "10" }).setToken(config.discord.token);
 
-await rest.put(Routes.applicationGuildCommands(config.discord.clientId, config.discord.guildId), { body: commands });
-console.log(`Registered ${commands.length} guild slash commands.`);
+for (const guildId of config.discord.guildIds) {
+  await rest.put(Routes.applicationGuildCommands(config.discord.clientId, guildId), { body: commands });
+  console.log(`Registered ${commands.length} guild slash commands for guild ${guildId}.`);
+}

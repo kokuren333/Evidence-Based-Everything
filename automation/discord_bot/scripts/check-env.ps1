@@ -4,7 +4,6 @@ $ErrorActionPreference = "Stop"
 $required = @(
   "DISCORD_TOKEN",
   "DISCORD_CLIENT_ID",
-  "DISCORD_GUILD_ID",
   "DISCORD_ADMIN_USER_IDS",
   "EBE_VAULT_ROOT",
   "EBE_WORKTREE_ROOT"
@@ -30,6 +29,10 @@ foreach ($name in $required) {
     throw "Missing required .env value: $name"
   }
 }
+if ((-not $values.ContainsKey("DISCORD_GUILD_IDS") -or [string]::IsNullOrWhiteSpace($values["DISCORD_GUILD_IDS"])) -and
+    (-not $values.ContainsKey("DISCORD_GUILD_ID") -or [string]::IsNullOrWhiteSpace($values["DISCORD_GUILD_ID"]))) {
+  throw "Missing required .env value: DISCORD_GUILD_IDS or DISCORD_GUILD_ID"
+}
 
 $vaultRoot = $values["EBE_VAULT_ROOT"]
 $worktreeRoot = $values["EBE_WORKTREE_ROOT"]
@@ -43,9 +46,19 @@ if ($worktreeRoot.StartsWith($vaultRoot, [System.StringComparison]::OrdinalIgnor
   throw "EBE_WORKTREE_ROOT must not be inside EBE_VAULT_ROOT."
 }
 
-foreach ($name in @("DISCORD_CLIENT_ID", "DISCORD_GUILD_ID")) {
+foreach ($name in @("DISCORD_CLIENT_ID")) {
   if ($values[$name] -notmatch "^\d{15,25}$") {
     throw "$name should look like a Discord numeric ID."
+  }
+}
+$guildIdsRaw = if ($values.ContainsKey("DISCORD_GUILD_IDS") -and -not [string]::IsNullOrWhiteSpace($values["DISCORD_GUILD_IDS"])) {
+  $values["DISCORD_GUILD_IDS"]
+} else {
+  $values["DISCORD_GUILD_ID"]
+}
+foreach ($id in $guildIdsRaw.Split(",")) {
+  if ($id.Trim() -notmatch "^\d{15,25}$") {
+    throw "Discord guild IDs should look like Discord numeric IDs: $id"
   }
 }
 

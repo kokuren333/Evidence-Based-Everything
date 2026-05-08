@@ -28,8 +28,20 @@ function boolEnv(name: string, fallback: boolean): boolean {
   return ["1", "true", "yes", "on"].includes(raw.toLowerCase());
 }
 
+function listEnv(name: string, fallback?: string): string[] {
+  return env(name, fallback)
+    .split(",")
+    .map((value) => value.trim())
+    .filter(Boolean);
+}
+
 function resolveBotPath(value: string): string {
   return path.isAbsolute(value) ? value : path.resolve(botRoot, value);
+}
+
+const guildIds = listEnv("DISCORD_GUILD_IDS", env("DISCORD_GUILD_ID", ""));
+if (guildIds.length === 0) {
+  throw new Error("Missing required environment variable: DISCORD_GUILD_IDS or DISCORD_GUILD_ID");
 }
 
 export const config = {
@@ -37,7 +49,8 @@ export const config = {
   discord: {
     token: env("DISCORD_TOKEN"),
     clientId: env("DISCORD_CLIENT_ID"),
-    guildId: env("DISCORD_GUILD_ID"),
+    guildId: guildIds[0],
+    guildIds,
     adminUserIds: new Set(
       env("DISCORD_ADMIN_USER_IDS")
         .split(",")

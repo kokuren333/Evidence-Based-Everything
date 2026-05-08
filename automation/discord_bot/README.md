@@ -151,7 +151,7 @@ Discord Developer PortalでBotを作る。
 1. New Applicationを作成する。
 2. Botページでtokenを作成し、`DISCORD_TOKEN` に入れる。
 3. General InformationのApplication IDを `DISCORD_CLIENT_ID` に入れる。
-4. Discord server IDを `DISCORD_GUILD_ID` に入れる。
+4. Discord server IDを `DISCORD_GUILD_IDS` に入れる。複数サーバーはカンマ区切りで指定する。
 5. 管理者にするDiscord user IDを `DISCORD_ADMIN_USER_IDS` に入れる。
 6. Botを次のscopeでサーバーへ招待する。
 
@@ -175,7 +175,7 @@ notepad .env
 ```env
 DISCORD_TOKEN=
 DISCORD_CLIENT_ID=
-DISCORD_GUILD_ID=
+DISCORD_GUILD_IDS=
 DISCORD_ADMIN_USER_IDS=
 
 EBE_VAULT_ROOT=C:\path\to\Evidence-Based-Everything
