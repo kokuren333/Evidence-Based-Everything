@@ -12,7 +12,7 @@
 
 ## Published Category MOCs
 
-- [[10_Published/01_Life_Health_Medicine/_MOC.md|生命・健康・医学]] - 16 subfields, 40 articles
+- [[10_Published/01_Life_Health_Medicine/_MOC.md|生命・健康・医学]] - 16 subfields, 41 articles
 - [[10_Published/02_Mind_Education_Human_Development/_MOC.md|心理・教育・人間発達]] - 4 subfields, 5 articles
 - [[10_Published/03_Society_Policy_Law_Governance/_MOC.md|社会・政策・法・ガバナンス]] - 1 subfields, 1 articles
 - [[10_Published/04_Economy_Business_Work/_MOC.md|経済・ビジネス・仕事]] - 1 subfields, 1 articles
@@ -26,14 +26,14 @@
 ## Taxonomy Coverage
 
 - Last rebuilt: 2026-05-08
-- Repair job: job-20260508004326-wlzjaz
+- Repair job: job-20260508004326-wlzjaz; updated by job-20260508010902-dk9hwl
 - Coverage source: `10_Published/` filesystem tree
-- Total published articles: 60
+- Total published articles: 61
 - Total subfields: 33
 - Direct articles under category roots: 0
 
 ## Coverage Check
 
 - All 10 major categories are linked.
-- New IgG4 diagnostic criteria article is reachable through the immune-disorders subfield MOC, the health category MOC, and MOC - All Published.
+- New history-of-present-illness writing article is reachable through the clinical documentation subfield MOC, the health category MOC, and MOC - All Published.
 - Empty categories are retained as category MOCs without stale article links.
