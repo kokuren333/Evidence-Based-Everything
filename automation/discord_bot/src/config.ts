@@ -83,4 +83,10 @@ export const config = {
     hourJst: intEnv("EBE_DAILY_NEWS_HOUR_JST", 6),
     minuteJst: intEnv("EBE_DAILY_NEWS_MINUTE_JST", 0),
   },
+  dailyForecast: {
+    enabled: boolEnv("EBE_DAILY_FORECAST_ENABLED", true),
+    channelId: env("DISCORD_DAILY_FORECAST_CHANNEL_ID", env("DISCORD_DAILY_NEWS_CHANNEL_ID", "")),
+    hourJst: intEnv("EBE_DAILY_FORECAST_HOUR_JST", 7),
+    minuteJst: intEnv("EBE_DAILY_FORECAST_MINUTE_JST", 0),
+  },
 };

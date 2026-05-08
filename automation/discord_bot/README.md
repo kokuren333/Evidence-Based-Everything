@@ -36,6 +36,11 @@ Discord command
   - 指定日の10分野分の日次ニュースjobをキューに入れる。
   - `date` を省略するとJSTの当日を使う。
 
+- `/daily_forecast date:"2026-05-02"`
+  - 管理者専用。
+  - 指定日の5種類分のForecasting jobをキューに入れる。
+  - `date` を省略するとJSTの当日を使う。
+
 - `/moc-maintenance scope:all`
   - 管理者専用。
   - 公開記事・日次記事のMOCを再構成する。
@@ -92,7 +97,7 @@ Discord command
 - Discord token、GitHub token、Codex認証情報をrepositoryに入れない。
 - `data/`、`logs/`、`node_modules/`、`dist/` はローカル専用。
 - worker worktreeはVault repositoryの外に作る。
-- `/codex`、`/daily-news`、`/moc-maintenance`、`/image_maintenance`、`/job-cancel`、`/job-retry`、`/queue-pause`、`/queue-resume`、`/git-debug`、`/job-cleanup` は管理者向け。
+- `/codex`、`/daily-news`、`/daily_forecast`、`/moc-maintenance`、`/image_maintenance`、`/job-cancel`、`/job-retry`、`/queue-pause`、`/queue-resume`、`/git-debug`、`/job-cleanup` は管理者向け。
 - 管理者は `.env` の `DISCORD_ADMIN_USER_IDS` にDiscord user IDをカンマ区切りで設定する。
 
 ## ディレクトリ構造
@@ -318,6 +323,26 @@ EBE_DAILY_NEWS_MINUTE_JST=0
 ```
 
 同じ日付の記事がすでに `11_Daily/` にある場合や、同日付の未失敗jobが残っている場合は重複投入を避ける。
+
+## 日次Forecasting
+
+手動実行:
+
+```text
+/daily_forecast
+/daily_forecast date:"2026-05-02"
+```
+
+自動実行は `.env` で制御する。
+
+```env
+EBE_DAILY_FORECAST_ENABLED=true
+DISCORD_DAILY_FORECAST_CHANNEL_ID=
+EBE_DAILY_FORECAST_HOUR_JST=7
+EBE_DAILY_FORECAST_MINUTE_JST=0
+```
+
+同じ日付の記事がすでに `12_Forecasting/` にある場合や、同日付の未失敗jobが残っている場合は重複投入を避ける。
 
 ## モバイルObsidianで読む
 

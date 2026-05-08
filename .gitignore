@@ -21,6 +21,10 @@
 /11_Daily/**/*.md
 !/11_Daily/**/.gitkeep
 
+/12_Forecasting/*.md
+/12_Forecasting/**/*.md
+!/12_Forecasting/**/.gitkeep
+
 /20_EvidencePackets/*
 !/20_EvidencePackets/README.md
 !/20_EvidencePackets/.gitkeep
@@ -39,6 +43,8 @@
 !/50_Assets/Diagrams/.gitkeep
 /50_Assets/Attachments/*
 !/50_Assets/Attachments/.gitkeep
+/50_Assets/Forecasting/*
+!/50_Assets/Forecasting/.gitkeep
 
 /70_Logs/update_logs/*
 !/70_Logs/update_logs/.gitkeep

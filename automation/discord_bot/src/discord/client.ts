@@ -4,6 +4,7 @@ import type { JobStore } from "../queue/jobStore.js";
 import type { WorkerPool } from "../queue/workerPool.js";
 import { gitStatus, debugSyncMain } from "../runners/gitPublisher.js";
 import { assertAdmin } from "../services/accessControl.js";
+import { enqueueDailyForecastJobs } from "../services/dailyForecast.js";
 import { enqueueDailyNewsJobs } from "../services/dailyNews.js";
 import { enqueueImageMaintenanceJob } from "../services/imageMaintenance.js";
 import { enqueueMocMaintenanceJob } from "../services/mocMaintenance.js";
@@ -126,6 +127,26 @@ export function createDiscordClient(store: JobStore, getWorkerPool: () => Worker
             `jobs: \`${result.jobs.length}\``,
             result.skippedReason,
             ...result.jobs.map((job) => `- \`${job.id}\` ${job.daily?.directoryName}`),
+          ]
+            .filter(Boolean)
+            .join("\n"),
+        );
+      } else if (interaction.commandName === "daily_forecast") {
+        assertAdmin(interaction.user.id);
+        const date = interaction.options.getString("date") ?? undefined;
+        await interaction.deferReply();
+        const result = await enqueueDailyForecastJobs(store, {
+          channelId: interaction.channelId,
+          guildId: interaction.guildId,
+          discordUserId: interaction.user.id,
+          date,
+        });
+        await interaction.editReply(
+          [
+            `daily forecast queued: \`${result.date}\``,
+            `jobs: \`${result.jobs.length}\``,
+            result.skippedReason,
+            ...result.jobs.map((job) => `- \`${job.id}\` ${job.forecast?.forecastType}`),
           ]
             .filter(Boolean)
             .join("\n"),
@@ -260,6 +281,7 @@ function formatJob(job: Job): string {
     `mode: \`${job.mode}\``,
     job.jobType ? `type: \`${job.jobType}\`` : undefined,
     job.daily ? `daily: \`${job.daily.date} ${job.daily.directoryName}\`` : undefined,
+    job.forecast ? `forecast: \`${job.forecast.date} ${job.forecast.forecastType}\`` : undefined,
     job.mocMaintenance ? `moc_scope: \`${job.mocMaintenance.scope}\`` : undefined,
     job.imageMaintenance ? `image_scope: \`${job.imageMaintenance.scope}\`` : undefined,
     `created: \`${job.createdAt}\``,

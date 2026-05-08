@@ -4,6 +4,7 @@ import { config } from "../config.js";
 import type {
   ArticleMode,
   BotState,
+  DailyForecastMeta,
   DailyNewsMeta,
   ImageMaintenanceMeta,
   Job,
@@ -45,6 +46,7 @@ export class JobStore {
     reasoningEffort: string;
     jobType?: JobType;
     daily?: DailyNewsMeta;
+    forecast?: DailyForecastMeta;
     mocMaintenance?: MocMaintenanceMeta;
     imageMaintenance?: ImageMaintenanceMeta;
   }): Promise<Job> {
@@ -65,6 +67,7 @@ export class JobStore {
         model: input.model,
         reasoningEffort: input.reasoningEffort,
         daily: input.daily,
+        forecast: input.forecast,
         mocMaintenance: input.mocMaintenance,
         imageMaintenance: input.imageMaintenance,
       };
@@ -85,6 +88,7 @@ export class JobStore {
       reasoningEffort: string;
       jobType?: JobType;
       daily?: DailyNewsMeta;
+      forecast?: DailyForecastMeta;
       mocMaintenance?: MocMaintenanceMeta;
       imageMaintenance?: ImageMaintenanceMeta;
     }[],
@@ -106,6 +110,7 @@ export class JobStore {
         model: input.model,
         reasoningEffort: input.reasoningEffort,
         daily: input.daily,
+        forecast: input.forecast,
         mocMaintenance: input.mocMaintenance,
         imageMaintenance: input.imageMaintenance,
       }));
@@ -204,6 +209,7 @@ export class JobStore {
         model: source.model,
         reasoningEffort: source.reasoningEffort,
         daily: source.daily,
+        forecast: source.forecast,
         mocMaintenance: source.mocMaintenance,
         imageMaintenance: source.imageMaintenance,
         resultSummary: `Retry of ${source.id}`,
@@ -249,6 +255,10 @@ export class JobStore {
 
   async dailyJobsForDate(date: string): Promise<Job[]> {
     return (await this.all()).filter((job) => job.jobType === "daily_news" && job.daily?.date === date);
+  }
+
+  async forecastJobsForDate(date: string): Promise<Job[]> {
+    return (await this.all()).filter((job) => job.jobType === "daily_forecast" && job.forecast?.date === date);
   }
 
   private async read(): Promise<StoreData> {

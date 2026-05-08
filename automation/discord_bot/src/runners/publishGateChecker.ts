@@ -3,6 +3,7 @@ import { runGit } from "../utils/shell.js";
 const durablePrefixes = [
   "10_Published/",
   "11_Daily/",
+  "12_Forecasting/",
   "20_EvidencePackets/",
   "30_Sources/",
   "40_Claims/",

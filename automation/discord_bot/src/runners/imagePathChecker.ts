@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
 
-export type ImagePathScope = "all" | "published" | "daily";
+export type ImagePathScope = "all" | "published" | "daily" | "forecasting";
 
 interface ImageReference {
   articlePath: string;
@@ -31,7 +31,14 @@ export async function assertArticleImagePaths(cwd: string, scope: ImagePathScope
 }
 
 async function findArticleImagePathFindings(cwd: string, scope: ImagePathScope): Promise<ImageFinding[]> {
-  const articleRoots = scope === "published" ? ["10_Published"] : scope === "daily" ? ["11_Daily"] : ["10_Published", "11_Daily"];
+  const articleRoots =
+    scope === "published"
+      ? ["10_Published"]
+      : scope === "daily"
+        ? ["11_Daily"]
+        : scope === "forecasting"
+          ? ["12_Forecasting"]
+          : ["10_Published", "11_Daily", "12_Forecasting"];
   const imageIndex = await buildImageIndex(cwd);
   const findings: ImageFinding[] = [];
 
@@ -123,7 +130,7 @@ function isImageTarget(rawTarget: string): boolean {
 }
 
 async function buildImageIndex(cwd: string): Promise<Map<string, string[]>> {
-  const roots = ["00_Index", "10_Published", "11_Daily", "50_Assets"];
+  const roots = ["00_Index", "10_Published", "11_Daily", "12_Forecasting", "50_Assets"];
   const index = new Map<string, string[]>();
   for (const root of roots) {
     const absoluteRoot = path.join(cwd, root);

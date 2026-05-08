@@ -120,8 +120,13 @@ export class WorkerPool {
         if (job.jobType === "moc_maintenance") {
           await assertMocIntegrity(job.worktreePath!);
         }
-        if (["article", "daily_news", "image_maintenance"].includes(job.jobType ?? "article")) {
-          const scope = job.jobType === "daily_news" ? "daily" : (job.imageMaintenance?.scope ?? "all");
+        if (["article", "daily_news", "daily_forecast", "image_maintenance"].includes(job.jobType ?? "article")) {
+          const scope =
+            job.jobType === "daily_news"
+              ? "daily"
+              : job.jobType === "daily_forecast"
+                ? "forecasting"
+                : (job.imageMaintenance?.scope ?? "all");
           await assertArticleImagePaths(job.worktreePath!, scope);
         }
         await this.throwIfCancelled(job.id);

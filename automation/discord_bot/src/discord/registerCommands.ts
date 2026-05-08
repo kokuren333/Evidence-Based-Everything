@@ -57,6 +57,15 @@ const commands = [
         .setRequired(false),
     ),
   new SlashCommandBuilder()
+    .setName("daily_forecast")
+    .setDescription("Admin-only: queue the 5 daily forecasting articles immediately.")
+    .addStringOption((option) =>
+      option
+        .setName("date")
+        .setDescription("Optional JST date to generate, YYYY-MM-DD. Defaults to today.")
+        .setRequired(false),
+    ),
+  new SlashCommandBuilder()
     .setName("moc-maintenance")
     .setDescription("Admin-only: rebuild published and daily Obsidian MOCs in bulk.")
     .addStringOption((option) =>
