@@ -1,5 +1,11 @@
 # EBE - Home
 
+> Rebuilt by EBE job 
+job-20260510210046-331uz5
+ on 
+2026-05-11
+ to reflect the current published taxonomy.
+
 ## Start Here
 
 - [[00_Index/EBE - Global MOC.md|EBE - Global MOC]]
@@ -19,6 +25,11 @@
 - [[10_Published/08_Humanities_History_Culture_Arts/_MOC.md|人文・歴史・文化・芸術]]
 - [[10_Published/09_Information_Media_OSINT_Security/_MOC.md|情報・メディア・OSINT・セキュリティ]]
 - [[10_Published/10_Life_Design_Practice_Creative_Work/_MOC.md|ライフデザイン・実践・創作]]
+
+## Evidence Operations
+
+- [[60_MOCs/MOC - All Sources.md|MOC - All Sources]]
+- [[60_MOCs/MOC - All Claims.md|MOC - All Claims]]
 
 ## Policies
 
