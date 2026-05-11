@@ -1,6 +1,6 @@
-﻿# EBE - Home
+# EBE - Home
 
-> Rebuilt by EBE job job-20260511210059-779w0n on 2026-05-12 to reflect the current published taxonomy.
+> Rebuilt by EBE job job-20260511210059-qz42nq on 2026-05-12 to reflect the current published taxonomy.
 
 ## Start Here
 
