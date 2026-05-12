@@ -1,6 +1,6 @@
 # EBE - Global MOC
 
-> Rebuilt by EBE job job-20260511210059-6az7cn on 2026-05-12 to reflect the current published taxonomy.
+> Rebuilt by EBE job job-20260512210012-c0yzxc on 2026-05-13 to reflect the current published taxonomy.
 
 ## Published Knowledge Base
 
@@ -17,7 +17,7 @@
 - [[10_Published/05_Nature_Science_Environment/_MOC.md|自然科学・環境]] - 1 subfields, 1 articles
 - [[10_Published/06_Mathematics_Logic_Formal_Systems/_MOC.md|数学・論理・形式体系]] - 0 subfields, 0 articles
 - [[10_Published/07_Technology_Engineering_Computing_AI/_MOC.md|技術・工学・コンピューティング・AI]] - 6 subfields, 8 articles
-- [[10_Published/08_Humanities_History_Culture_Arts/_MOC.md|人文・歴史・文化・芸術]] - 2 subfields, 2 articles
+- [[10_Published/08_Humanities_History_Culture_Arts/_MOC.md|人文学・歴史・文化・芸術]] - 2 subfields, 2 articles
 - [[10_Published/09_Information_Media_OSINT_Security/_MOC.md|情報・メディア・OSINT・セキュリティ]] - 0 subfields, 0 articles
 - [[10_Published/10_Life_Design_Practice_Creative_Work/_MOC.md|ライフデザイン・実践・創作]] - 3 subfields, 3 articles
 
